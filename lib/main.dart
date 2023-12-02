@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:swiperight/views/home_screen.dart';
 import 'package:swiperight/views/welcome_page.dart';
 
 void main() {
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const WelcomePage(),
+      home: WelcomePage(),
     );
   }
 }
