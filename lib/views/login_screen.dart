@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/tab_view_home.dart';
 import 'package:swiperight/views/forgot_password.dart';
-import 'package:swiperight/views/home_screen.dart';
 import 'package:swiperight/views/register_screen.dart';
 import 'package:swiperight/views/welcome_page.dart';
 

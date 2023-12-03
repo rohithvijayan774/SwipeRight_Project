@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/create_new_password.dart';
-import 'package:swiperight/views/register_screen.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/home_screen.dart';
-import 'package:swiperight/views/login_screen.dart';
+import 'package:swiperight/views/profile.dart';
 
 class TabViewHome extends StatelessWidget {
   const TabViewHome({super.key});
@@ -14,7 +14,7 @@ class TabViewHome extends StatelessWidget {
         body: const TabBarView(
           children: [
             HomeScreen(),
-            LoginScreen(),
+            Profile(),
           ],
         ),
         bottomNavigationBar: Container(
