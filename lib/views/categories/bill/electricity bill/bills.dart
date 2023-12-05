@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/views/categories/food%20&%20groceries/add_items.dart';
-import 'package:swiperight/views/categories/food%20&%20groceries/all_items.dart';
+import 'package:swiperight/views/categories/bill/electricity%20bill/add_electricity_bill.dart';
+import 'package:swiperight/views/categories/bill/water%20bill/add_water_bill.dart';
 import 'package:swiperight/views/categories/food%20&%20groceries/expire_soon_items.dart';
 import 'package:swiperight/views/categories/food%20&%20groceries/expired_items.dart';
-import 'package:swiperight/views/categories/food%20&%20groceries/settings.dart';
-import 'package:swiperight/widgets/food_custom_tile.dart';
+import 'package:swiperight/widgets/bills_custom_tile.dart';
 
-class FoodAndGroceries extends StatelessWidget {
-  const FoodAndGroceries({super.key});
+class Bills extends StatelessWidget {
+  const Bills({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +38,7 @@ class FoodAndGroceries extends StatelessWidget {
                           width: 20,
                         ),
                         const Text(
-                          'FOOD & GROCERY',
+                          'BILLS',
                           style: TextStyle(fontFamily: 'Poppins', fontSize: 20),
                         ),
                       ],
@@ -54,66 +53,33 @@ class FoodAndGroceries extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     children: [
-                      FoodCustomTile(
-                        title: 'ALL ITEMS',
+                      BillsCustomTile(
+                        title: 'ELECTRICITY BILL',
+                        icon: Icons.document_scanner_outlined,
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const AllItems(),
+                              builder: (context) => const PayElectricityBills(),
                             ),
                           );
                         },
                       ),
-                      FoodCustomTile(
-                          title: 'SOON EXPIRE',
+                      BillsCustomTile(
+                          title: 'WATER BILL',
+                          icon: Icons.water_damage_outlined,
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ExpireSoonItems(),
+                              builder: (context) => const AddWaterBill(),
                             ));
                           }),
-                      FoodCustomTile(
-                          title: 'EXPIRED',
+                      BillsCustomTile(
+                          title: 'PAY LOAN',
+                          icon: Icons.local_atm_rounded,
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const ExpiredItems(),
                             ));
                           }),
-                      SizedBox(
-                        width: width,
-                        height: height * 0.06,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const AddItems(),
-                                ));
-                              },
-                              icon: const Icon(
-                                Icons.add,
-                                color: Colors.black,
-                              ),
-                              label: const Text(
-                                'ADD ITEM',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => const Settings(),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(
-                                Icons.settings_outlined,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),

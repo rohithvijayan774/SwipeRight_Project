@@ -5,10 +5,13 @@ import 'package:swiperight/views/categories/food%20&%20groceries/all_items.dart'
 import 'package:swiperight/views/categories/food%20&%20groceries/expire_soon_items.dart';
 import 'package:swiperight/views/categories/food%20&%20groceries/expired_items.dart';
 import 'package:swiperight/views/categories/food%20&%20groceries/settings.dart';
+import 'package:swiperight/views/categories/medicines/medicine_all_items.dart';
+import 'package:swiperight/views/categories/medicines/medicine_expire_soon_items.dart';
+import 'package:swiperight/views/categories/medicines/medicine_expired_items.dart';
 import 'package:swiperight/widgets/food_custom_tile.dart';
 
-class FoodAndGroceries extends StatelessWidget {
-  const FoodAndGroceries({super.key});
+class Medicines extends StatelessWidget {
+  const Medicines({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class FoodAndGroceries extends StatelessWidget {
                           width: 20,
                         ),
                         const Text(
-                          'FOOD & GROCERY',
+                          'MEDICINE',
                           style: TextStyle(fontFamily: 'Poppins', fontSize: 20),
                         ),
                       ],
@@ -59,7 +62,7 @@ class FoodAndGroceries extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const AllItems(),
+                              builder: (context) => const MedicineAllItems(),
                             ),
                           );
                         },
@@ -68,14 +71,16 @@ class FoodAndGroceries extends StatelessWidget {
                           title: 'SOON EXPIRE',
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ExpireSoonItems(),
+                              builder: (context) =>
+                                  const MedicineExpireSoonItems(),
                             ));
                           }),
                       FoodCustomTile(
                           title: 'EXPIRED',
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ExpiredItems(),
+                              builder: (context) =>
+                                  const MedicineExpiredItems(),
                             ));
                           }),
                       SizedBox(

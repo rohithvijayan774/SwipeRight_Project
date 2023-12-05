@@ -19,34 +19,36 @@ class HomeScreenCategoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            onPressed();
-          },
-          child: Container(
-            width: width * 0.4,
-            height: height * 0.08,
-            decoration: BoxDecoration(
-              color: tileColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(
-              tileIcon,
-              size: 40,
-              color: iconColor,
+    return SizedBox(
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              onPressed();
+            },
+            child: Container(
+              width: width * 0.4,
+              height: height * 0.08,
+              decoration: BoxDecoration(
+                color: tileColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                tileIcon,
+                size: 40,
+                color: iconColor,
+              ),
             ),
           ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Text(
-          title,
-          style: const TextStyle(fontFamily: 'Poppins', fontSize: 10),
-        )
-      ],
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            title,
+            style: const TextStyle(fontFamily: 'Poppins', fontSize: 10),
+          )
+        ],
+      ),
     );
   }
 }
