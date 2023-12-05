@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/bills.dart';
 import 'package:swiperight/views/categories/food%20&%20groceries/food_groceries.dart';
+import 'package:swiperight/views/categories/insurance/insure_users_list.dart';
 import 'package:swiperight/views/categories/medicines/medicines.dart';
+import 'package:swiperight/views/categories/recharge/mobile/recharge_type.dart';
 import 'package:swiperight/widgets/home_screen_category_tile.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -133,7 +135,13 @@ class HomeScreen extends StatelessWidget {
                           tileIcon: Icons.phone_iphone_rounded,
                           tileColor: const Color.fromARGB(51, 255, 136, 0),
                           iconColor: Colors.white,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const RechargeType(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -148,7 +156,13 @@ class HomeScreen extends StatelessWidget {
                           tileIcon: Icons.account_balance_rounded,
                           tileColor: const Color(0xFFFADEAC),
                           iconColor: Colors.black,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const InsureUsersList(),
+                              ),
+                            );
+                          },
                         ),
                         HomeScreenCategoryTile(
                           title: 'Subscription',

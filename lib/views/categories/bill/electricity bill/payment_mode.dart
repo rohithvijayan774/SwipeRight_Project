@@ -1,4 +1,3 @@
-import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 
@@ -215,7 +214,7 @@ class _PaymentModesState extends State<PaymentModes> {
                       ),
                       InkWell(
                         onTap: () {
-                          print('$selectedMode');
+                          print(selectedMode);
                         },
                         child: Container(
                           color: const Color.fromARGB(123, 13, 72, 161),

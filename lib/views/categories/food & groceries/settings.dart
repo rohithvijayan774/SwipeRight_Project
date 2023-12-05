@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/widgets/food_details_tile.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});

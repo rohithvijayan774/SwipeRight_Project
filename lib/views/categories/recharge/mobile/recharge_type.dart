@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/views/categories/bill/electricity%20bill/add_electricity_bill.dart';
-import 'package:swiperight/views/categories/bill/loan/select_bank.dart';
 import 'package:swiperight/views/categories/bill/water%20bill/add_water_bill.dart';
-import 'package:swiperight/views/categories/food%20&%20groceries/expired_items.dart';
+import 'package:swiperight/views/categories/recharge/dth/dth_users_list.dart';
+import 'package:swiperight/views/categories/recharge/mobile/recharge_users_list.dart';
 import 'package:swiperight/widgets/bills_custom_tile.dart';
 
-class Bills extends StatelessWidget {
-  const Bills({super.key});
+class RechargeType extends StatelessWidget {
+  const RechargeType({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class Bills extends StatelessWidget {
                           width: 20,
                         ),
                         const Text(
-                          'BILLS',
+                          'RECHARGE',
                           style: TextStyle(fontFamily: 'Poppins', fontSize: 20),
                         ),
                       ],
@@ -54,30 +53,22 @@ class Bills extends StatelessWidget {
                   child: Column(
                     children: [
                       BillsCustomTile(
-                        title: 'ELECTRICITY BILL',
-                        icon: Icons.document_scanner_outlined,
+                        title: 'Mobile Recharge',
+                        icon: Icons.phone_iphone_outlined,
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const PayElectricityBills(),
+                              builder: (context) => const RechargeUsersList(),
                             ),
                           );
                         },
                       ),
                       BillsCustomTile(
-                          title: 'WATER BILL',
-                          icon: Icons.water_damage_outlined,
+                          title: 'DTH Recharge',
+                          icon: Icons.desktop_windows_sharp,
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const AddWaterBill(),
-                            ));
-                          }),
-                      BillsCustomTile(
-                          title: 'PAY LOAN',
-                          icon: Icons.local_atm_rounded,
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const SelectBank(),
+                              builder: (context) => const DTHUsersList(),
                             ));
                           }),
                     ],
