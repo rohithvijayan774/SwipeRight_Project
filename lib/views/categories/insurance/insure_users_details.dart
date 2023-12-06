@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/payment_mode.dart';
+import 'package:swiperight/views/categories/insurance/pay_insure.dart';
 
 class InsureUserDetails extends StatelessWidget {
   final String userName;
@@ -47,7 +48,7 @@ class InsureUserDetails extends StatelessWidget {
                           width: 20,
                         ),
                         const Text(
-                          'MOBILE RECHARGE',
+                          'INSURANCE',
                           style: TextStyle(fontFamily: 'Poppins', fontSize: 20),
                         ),
                       ],
@@ -63,7 +64,7 @@ class InsureUserDetails extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         width: width,
                         decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -188,8 +189,7 @@ class InsureUserDetails extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                const PaymentModes(paymentAmount: 250),
+                            builder: (context) => const PayInsurance(),
                           ));
                         },
                         child: Container(

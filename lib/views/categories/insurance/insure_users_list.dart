@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
+import 'package:swiperight/views/categories/insurance/add_insure.dart';
 import 'package:swiperight/views/categories/insurance/insure_users_details.dart';
 import 'package:swiperight/views/categories/recharge/mobile/add_user.dart';
 import 'package:swiperight/views/categories/recharge/mobile/user_details.dart';
@@ -54,7 +55,7 @@ class InsureUsersList extends StatelessWidget {
                           width: 20,
                         ),
                         const Text(
-                          'MOBILE RECHARGE',
+                          'INSURANCE',
                           style: TextStyle(fontFamily: 'Poppins', fontSize: 20),
                         ),
                       ],
@@ -129,7 +130,7 @@ class InsureUsersList extends StatelessWidget {
           backgroundColor: Colors.black,
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const AddUser(),
+              builder: (context) => const AddInsurance(),
             ));
           },
           child: const Icon(
