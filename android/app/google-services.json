@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "362887982100",
+    "project_id": "swiperight-ba820",
+    "storage_bucket": "swiperight-ba820.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362887982100:android:a9345f2d368393a2ee0b01",
+        "android_client_info": {
+          "package_name": "com.example.swiperight"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOXeYSQDbB3IXRSdrJ4FSPwMdU6RJsyJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
