@@ -323,7 +323,7 @@ class AddItems extends StatelessWidget {
                                                 Expanded(
                                                   child:
                                                       DropdownButtonFormField(
-                                                    items: [],
+                                                    items:const [],
                                                     onChanged: (value) {},
                                                     decoration: const InputDecoration(
                                                         hintText: 'Category',

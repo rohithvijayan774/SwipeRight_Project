@@ -180,7 +180,7 @@ class Settings extends StatelessWidget {
                                   backgroundColor: defaultBgColor,
                                   child: IconButton(
                                       onPressed: () {},
-                                      icon: Icon(Icons.delete_outline_rounded)),
+                                      icon:const Icon(Icons.delete_outline_rounded)),
                                 ),
                               ),
                             ),

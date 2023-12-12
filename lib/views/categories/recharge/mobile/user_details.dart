@@ -63,7 +63,7 @@ class UserDetails extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding:const EdgeInsets.all(10),
                         width: width,
                         decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/views/categories/bill/electricity%20bill/payment_mode.dart';
 import 'package:swiperight/views/categories/recharge/dth/select_operator.dart';
 
 class DTHUserDetails extends StatelessWidget {
@@ -67,7 +66,7 @@ class DTHUserDetails extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding:const EdgeInsets.all(10),
                         width: width,
                         decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),

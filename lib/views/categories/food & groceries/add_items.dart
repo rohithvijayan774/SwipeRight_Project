@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
+import 'package:swiperight/controller/food_grocery_controller.dart';
+import 'package:swiperight/controller/user_controller.dart';
 
 class AddItems extends StatelessWidget {
   const AddItems({super.key});
@@ -9,25 +12,6 @@ class AddItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final addFoodItemsKey = GlobalKey<FormState>();
-    TextEditingController nameController = TextEditingController();
-    TextEditingController dateController = TextEditingController();
-    TextEditingController reminderDateController = TextEditingController();
-    DateTime? selectedDate;
-    DateTime? selectedReminderDate;
-    Future<void> selectDate(
-        context, selectedDate, TextEditingController controller) async {
-      final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2100));
-
-      if (picked != null && picked != selectedDate) {
-        selectedDate = picked;
-        controller.text = DateFormat('dd-MM-yyyy').format(picked);
-      }
-    }
 
     print('******REBUILDING*************');
     return Scaffold(
@@ -86,389 +70,446 @@ class AddItems extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
                 child: SingleChildScrollView(
-                  child: Form(
-                    key: addFoodItemsKey,
-                    child: Column(
-                      children: [
-                        //Custom TextFormField
-                        Container(
-                          width: width,
-                          height: height * 0.09,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    'Enter Name : ',
-                                    style: TextStyle(fontFamily: 'SofiaPro'),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: height,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey[300]),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: TextFormField(
-                                          controller: nameController,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return "* this field is required";
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Enter here',
-                                            hintStyle: TextStyle(
-                                              fontSize: 15,
-                                              fontFamily: 'SofiaPro',
+                  child: Consumer2<FoodGroceryController, UserController>(
+                    builder: (context, foodGroceryAddController,
+                        userAddFoodController, _) {
+                      return Form(
+                        key: foodGroceryAddController.addFoodItemsKey,
+                        child: Column(
+                          children: [
+                            //Custom TextFormField
+                            Container(
+                              width: width,
+                              height: height * 0.09,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Enter Name : ',
+                                        style:
+                                            TextStyle(fontFamily: 'SofiaPro'),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: height,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.grey[300]),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: TextFormField(
+                                              controller:
+                                                  foodGroceryAddController
+                                                      .nameController,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return "* this field is required";
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                              decoration: const InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText: 'Enter here',
+                                                hintStyle: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'SofiaPro',
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          width: width,
-                          height: height * 0.09,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    'Enter Date : ',
-                                    style: TextStyle(fontFamily: 'SofiaPro'),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: height,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey[300]),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: TextFormField(
-                                          controller: dateController,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return "* this field is required";
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                          onTap: () {
-                                            selectDate(context, selectedDate,
-                                                dateController);
-                                          },
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                            suffixIcon:
-                                                Icon(Icons.date_range_outlined),
-                                            hintText: 'Choose Date',
-                                            hintStyle: TextStyle(
-                                              fontSize: 15,
-                                              fontFamily: 'SofiaPro',
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              width: width,
+                              height: height * 0.09,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Expiry Date : ',
+                                        style:
+                                            TextStyle(fontFamily: 'SofiaPro'),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: height,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.grey[300]),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: TextFormField(
+                                              controller:
+                                                  foodGroceryAddController
+                                                      .dateController,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return "* this field is required";
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                              onTap: () {
+                                                foodGroceryAddController
+                                                    .selectDate(
+                                                        context,
+                                                        foodGroceryAddController
+                                                            .selectedDate,
+                                                        foodGroceryAddController
+                                                            .dateController);
+                                              },
+                                              decoration: const InputDecoration(
+                                                border: InputBorder.none,
+                                                suffixIcon: Icon(
+                                                    Icons.date_range_outlined),
+                                                hintText: 'Choose Date',
+                                                hintStyle: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'SofiaPro',
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          width: width,
-                          height: height * 0.09,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    'Reminder : ',
-                                    style: TextStyle(fontFamily: 'SofiaPro'),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: height,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey[300]),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: TextFormField(
-                                          controller: reminderDateController,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return "* this field is required";
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                          onTap: () {
-                                            selectDate(
-                                                context,
-                                                selectedReminderDate,
-                                                reminderDateController);
-                                          },
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                            suffixIcon:
-                                                Icon(Icons.date_range_outlined),
-                                            hintText: 'Choose Date',
-                                            hintStyle: TextStyle(
-                                              fontSize: 15,
-                                              fontFamily: 'SofiaPro',
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              width: width,
+                              height: height * 0.09,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Reminder : ',
+                                        style:
+                                            TextStyle(fontFamily: 'SofiaPro'),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: height,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.grey[300]),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: TextFormField(
+                                              controller:
+                                                  foodGroceryAddController
+                                                      .reminderDateController,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return "* this field is required";
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                              onTap: () {
+                                                foodGroceryAddController.selectDate(
+                                                    context,
+                                                    foodGroceryAddController
+                                                        .selectedReminderDate,
+                                                    foodGroceryAddController
+                                                        .reminderDateController);
+                                              },
+                                              decoration: const InputDecoration(
+                                                border: InputBorder.none,
+                                                suffixIcon: Icon(
+                                                    Icons.date_range_outlined),
+                                                hintText: 'Choose Date',
+                                                hintStyle: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'SofiaPro',
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          width: width,
-                          height: height * 0.09,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    'Select Group : ',
-                                    style: TextStyle(fontFamily: 'SofiaPro'),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: height,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey[300]),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: TextFormField(
-                                          controller: reminderDateController,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return "* this field is required";
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                          decoration: InputDecoration(
-                                            suffixIcon: Row(
-                                              children: [
-                                                Expanded(
-                                                  child:
-                                                      DropdownButtonFormField(
-                                                    items: [],
-                                                    onChanged: (value) {},
-                                                    decoration: const InputDecoration(
-                                                        hintText: 'Category',
-                                                        hintStyle: TextStyle(
-                                                            fontFamily:
-                                                                'SofiaPro'),
-                                                        border:
-                                                            OutlineInputBorder(
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              width: width,
+                              height: height * 0.09,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Select Group : ',
+                                        style:
+                                            TextStyle(fontFamily: 'SofiaPro'),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: height,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.grey[300]),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: TextFormField(
+                                              controller:
+                                                  foodGroceryAddController
+                                                      .selectGroupController,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return "* this field is required";
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                              decoration: InputDecoration(
+                                                suffixIcon: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child:
+                                                          DropdownButtonFormField(
+                                                        items:
+                                                            userAddFoodController
+                                                                .foodGroupList
+                                                                .map(
+                                                                    (foodGroup) {
+                                                          return DropdownMenuItem(
+                                                            child: Text(
+                                                                foodGroup
+                                                                    .groupName),
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (value) {},
+                                                        decoration: const InputDecoration(
+                                                            hintText:
+                                                                'Category',
+                                                            hintStyle: TextStyle(
+                                                                fontFamily:
+                                                                    'SofiaPro'),
+                                                            border: OutlineInputBorder(
                                                                 borderSide:
                                                                     BorderSide
                                                                         .none)),
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                    onPressed: () {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return AlertDialog(
-                                                            title: const Text(
-                                                                'Add new category'),
-                                                            content:
-                                                                TextFormField(),
-                                                            actions: [
-                                                              ElevatedButton(
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child: const Text(
-                                                                    'Cancel'),
-                                                              ),
-                                                              ElevatedButton(
-                                                                onPressed:
-                                                                    () {},
-                                                                child:
-                                                                    const Text(
+                                                      ),
+                                                    ),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return AlertDialog(
+                                                                title: const Text(
+                                                                    'Add new category'),
+                                                                content:
+                                                                    TextFormField(
+                                                                  controller:
+                                                                      foodGroceryAddController
+                                                                          .addNewGroupController,
+                                                                ),
+                                                                actions: [
+                                                                  ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: const Text(
+                                                                        'Cancel'),
+                                                                  ),
+                                                                  ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      foodGroceryAddController.addNewFoodGroup(foodGroceryAddController
+                                                                          .addNewGroupController
+                                                                          .text);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: const Text(
                                                                         'Add'),
-                                                              ),
-                                                            ],
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
                                                           );
                                                         },
-                                                      );
-                                                    },
-                                                    icon: const Icon(Icons.add))
-                                              ],
-                                            ),
-                                            border: InputBorder.none,
-                                            hintText: 'Pick Group',
-                                            hintStyle: const TextStyle(
-                                              fontSize: 15,
-                                              fontFamily: 'SofiaPro',
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          width: width,
-                          height: height * 0.09,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    'Note : ',
-                                    style: TextStyle(fontFamily: 'SofiaPro'),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: height,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey[300]),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: TextFormField(
-                                          controller: nameController,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return "* this field is required";
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Enter here',
-                                            hintStyle: TextStyle(
-                                              fontSize: 15,
-                                              fontFamily: 'SofiaPro',
+                                                        icon: const Icon(
+                                                            Icons.add))
+                                                  ],
+                                                ),
+                                                border: InputBorder.none,
+                                                hintText: 'Pick Group',
+                                                hintStyle: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'SofiaPro',
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            if (addFoodItemsKey.currentState!.validate()) {
-                              print(nameController.text);
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.save_outlined,
-                            color: Colors.black,
-                          ),
-                          label: const Text(
-                            'SAVE',
-                            style: TextStyle(
-                              fontFamily: 'SofiaPro',
-                              color: Colors.black,
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
-                        )
-                      ],
-                    ),
+                            Container(
+                              width: width,
+                              height: height * 0.09,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 100,
+                                      child: Text(
+                                        'Note : ',
+                                        style:
+                                            TextStyle(fontFamily: 'SofiaPro'),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: height,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.grey[300]),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: TextFormField(
+                                              controller:
+                                                  foodGroceryAddController
+                                                      .notesController,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return "* this field is required";
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                              decoration: const InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText: 'Enter here',
+                                                hintStyle: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'SofiaPro',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                if (foodGroceryAddController
+                                    .addFoodItemsKey.currentState!
+                                    .validate()) {
+                                  print(foodGroceryAddController
+                                      .nameController.text);
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.save_outlined,
+                                color: Colors.black,
+                              ),
+                              label: const Text(
+                                'SAVE',
+                                style: TextStyle(
+                                  fontFamily: 'SofiaPro',
+                                  color: Colors.black,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

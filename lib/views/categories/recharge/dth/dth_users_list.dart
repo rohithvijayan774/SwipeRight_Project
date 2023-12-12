@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/recharge/dth/dth_user_details.dart';
 import 'package:swiperight/views/categories/recharge/mobile/add_user.dart';
-import 'package:swiperight/views/categories/recharge/mobile/user_details.dart';
 
 class DTHUsersList extends StatelessWidget {
   const DTHUsersList({super.key});

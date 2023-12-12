@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/views/categories/bill/electricity%20bill/electricity_bill_view.dart';
-import 'package:swiperight/views/categories/bill/loan/add_loan_amount.dart';
 import 'package:swiperight/views/categories/recharge/dth/dth_subscriber_id.dart';
 
 class SelectOperator extends StatelessWidget {

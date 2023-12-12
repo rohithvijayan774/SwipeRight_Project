@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/food%20&%20groceries/add_items.dart';
-import 'package:swiperight/views/categories/food%20&%20groceries/all_items.dart';
-import 'package:swiperight/views/categories/food%20&%20groceries/expire_soon_items.dart';
-import 'package:swiperight/views/categories/food%20&%20groceries/expired_items.dart';
 import 'package:swiperight/views/categories/food%20&%20groceries/settings.dart';
 import 'package:swiperight/views/categories/medicines/medicine_all_items.dart';
 import 'package:swiperight/views/categories/medicines/medicine_expire_soon_items.dart';

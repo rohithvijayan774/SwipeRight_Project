@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/views/categories/bill/electricity%20bill/payment_mode.dart';
 import 'package:swiperight/views/categories/insurance/pay_insure.dart';
 
 class InsureUserDetails extends StatelessWidget {

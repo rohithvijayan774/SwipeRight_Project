@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/views/categories/bill/electricity%20bill/pay_electricity_bill.dart';
 import 'package:swiperight/views/categories/bill/loan/pay_loan.dart';
 
 class LoansList extends StatelessWidget {

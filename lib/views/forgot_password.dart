@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/views/create_new_password.dart';
+import 'package:swiperight/controller/user_controller.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -40,56 +41,75 @@ class ForgotPasswordScreen extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ListView(
-                children: [
-                  const Text(
-                    'Forgot Password?',
-                    style: TextStyle(fontSize: 25, fontFamily: 'Poppins'),
-                  ),
-                  const Text(
-                    "Don't worry it occurs. Please enter the email address linked with your account.",
-                    style:
-                        TextStyle(fontFamily: 'SofiaPro', color: Colors.grey),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Enter your email',
-                      hintStyle: TextStyle(fontFamily: 'SofiaPro'),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  SizedBox(
-                    height: 40,
-                    width: width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: buttonColor1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+              child: Consumer<UserController>(
+                  builder: (context, changePassEmailController, _) {
+                return Form(
+                  key: changePassEmailController.resetPassEmailKey,
+                  child: ListView(
+                    children: [
+                      const Text(
+                        'Forgot Password?',
+                        style: TextStyle(fontSize: 25, fontFamily: 'Poppins'),
+                      ),
+                      const Text(
+                        "Don't worry it occurs. Please enter the email address linked with your account.",
+                        style: TextStyle(
+                            fontFamily: 'SofiaPro', color: Colors.grey),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: changePassEmailController.passwordResetEmailController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '*required field';
+                          } else {
+                            return null;
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter your email',
+                          hintStyle: TextStyle(fontFamily: 'SofiaPro'),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const CreateNewPasswordScreen(),
-                        ));
-                      },
-                      child: const Text(
-                        'Confirm',
-                        style: TextStyle(
-                            color: Colors.white, fontFamily: 'SofiaPro'),
+                      const SizedBox(
+                        height: 40,
                       ),
-                    ),
+                      SizedBox(
+                        height: 40,
+                        width: width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: buttonColor1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            if (changePassEmailController
+                                .resetPassEmailKey.currentState!
+                                .validate()) {
+                              changePassEmailController.sendPasswordResetEmail(
+                                  changePassEmailController
+                                      .passwordResetEmailController.text,
+                                  context);
+                            }
+                          },
+                          child: const Text(
+                            'Confirm',
+                            style: TextStyle(
+                                color: Colors.white, fontFamily: 'SofiaPro'),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              }),
             ),
           )
         ],

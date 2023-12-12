@@ -220,7 +220,7 @@ class PayBill extends StatelessWidget {
                                         onPressed: () {
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (context) => PaymentModes(
+                                            builder: (context) =>const PaymentModes(
                                                 paymentAmount: 1200),
                                           ));
                                         },

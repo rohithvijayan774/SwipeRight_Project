@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/insurance/add_insure.dart';
 import 'package:swiperight/views/categories/insurance/insure_users_details.dart';
-import 'package:swiperight/views/categories/recharge/mobile/add_user.dart';
-import 'package:swiperight/views/categories/recharge/mobile/user_details.dart';
 
 class InsureUsersList extends StatelessWidget {
   const InsureUsersList({super.key});

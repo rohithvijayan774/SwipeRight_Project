@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/tab_view_home.dart';
+import 'package:swiperight/controller/user_controller.dart';
 import 'package:swiperight/views/forgot_password.dart';
 import 'package:swiperight/views/register_screen.dart';
 import 'package:swiperight/views/welcome_page.dart';
@@ -47,80 +48,108 @@ class LoginScreen extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ListView(
-                children: [
-                  const Text(
-                    'Welcome back! Glad to see you. Again!',
-                    style: TextStyle(fontSize: 25, fontFamily: 'Poppins'),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Enter your email',
-                      hintStyle: TextStyle(fontFamily: 'SofiaPro'),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Enter your password',
-                      hintStyle: TextStyle(fontFamily: 'SofiaPro'),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+              child: Consumer<UserController>(
+                  builder: (context, userLoginController, _) {
+                return Form(
+                  key: userLoginController.loginKey,
+                  child: ListView(
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const ForgotPasswordScreen(),
-                          ));
+                      const Text(
+                        'Welcome back! Glad to see you. Again!',
+                        style: TextStyle(fontSize: 25, fontFamily: 'Poppins'),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: userLoginController.loginEmailController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '*required field';
+                          } else {
+                            return null;
+                          }
                         },
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                              fontFamily: 'SofiaPro', color: Colors.grey),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter your email',
+                          hintStyle: TextStyle(fontFamily: 'SofiaPro'),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: userLoginController.loginpasswordController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '*required field';
+                          } else {
+                            return null;
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter your password',
+                          hintStyle: TextStyle(fontFamily: 'SofiaPro'),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotPasswordScreen(),
+                              ));
+                            },
+                            child: const Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                  fontFamily: 'SofiaPro', color: Colors.grey),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SizedBox(
+                        height: 40,
+                        width: width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: buttonColor1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            if (userLoginController.loginKey.currentState!
+                                .validate()) {
+                              userLoginController.userLogin(
+                                  userLoginController.loginEmailController.text,
+                                  userLoginController
+                                      .loginpasswordController.text,
+                                  context);
+                            }
+                          },
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                                color: Colors.white, fontFamily: 'SofiaPro'),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    height: 40,
-                    width: width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: buttonColor1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const TabViewHome(),
-                        ));
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                            color: Colors.white, fontFamily: 'SofiaPro'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                );
+              }),
             ),
           )
         ],
