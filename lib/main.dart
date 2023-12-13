@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:swiperight/controller/food_grocery_controller.dart';
 import 'package:swiperight/controller/user_controller.dart';
 import 'package:swiperight/firebase_options.dart';
-import 'package:swiperight/views/splash_screen.dart';
 import 'package:swiperight/views/welcome_page.dart';
 
 void main() async {

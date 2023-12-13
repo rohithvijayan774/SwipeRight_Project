@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
+import 'package:swiperight/controller/food_grocery_controller.dart';
+import 'package:swiperight/controller/user_controller.dart';
 import 'package:swiperight/widgets/food_details_tile.dart';
 
 class ExpireSoonItems extends StatelessWidget {
@@ -78,17 +81,43 @@ class ExpireSoonItems extends StatelessWidget {
             Expanded(
                 child: Padding(
               padding: const EdgeInsets.only(left: 40, right: 40, top: 10),
-              child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return FoodDetailsTile(
-                    title: 'BREAD',
-                    date: '2023/11/22',
-                    days: 3,
-                    onPressed: () {},
-                  );
-                },
-              ),
+              child: Consumer2<UserController, FoodGroceryController>(builder:
+                  (context, allItemsController, foodGroceryController, _) {
+                return FutureBuilder(
+                    future: allItemsController.fetchFoodGrocerySoonExpire(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return allItemsController.foodGroceryList.isEmpty
+                          ? const Center(
+                              child: Text('Nothing here...'),
+                            )
+                          : ListView.builder(
+                              itemCount:
+                                  allItemsController.foodGroceryList.length,
+                              itemBuilder: (context, index) {
+                                DateTime currentDate = DateTime.now();
+                                DateTime formattedExpiryDate = DateTime.parse(
+                                    allItemsController
+                                        .foodGroceryList[index].expiryDate);
+                                Duration difference =
+                                    formattedExpiryDate.difference(currentDate);
+                                return FoodDetailsTile(
+                                  title: allItemsController
+                                      .foodGroceryList[index].foodGroceryName,
+                                  date: allItemsController
+                                      .foodGroceryList[index]
+                                      .foodGroceryExpiryDate,
+                                  days: difference.inDays,
+                                  onPressed: () {},
+                                );
+                              },
+                            );
+                    });
+              }),
             ))
           ],
         ),

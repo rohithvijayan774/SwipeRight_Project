@@ -12,9 +12,28 @@ class FoodGroceryController extends ChangeNotifier {
   TextEditingController reminderDateController = TextEditingController();
   TextEditingController selectGroupController = TextEditingController();
   TextEditingController notesController = TextEditingController();
-  DateTime? selectedDate;
+  DateTime? expiryDate;
+  DateTime? selectedFormattedDate;
   DateTime? selectedReminderDate;
-  Future<void> selectDate(
+
+  Future<void> selectDateForExpiry(
+      context, selectedDate, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      expiryDate = picked;
+      print('Expiry Date : $expiryDate');
+      selectedDate = picked;
+      controller.text = DateFormat('dd-MM-yyyy').format(picked);
+    }
+  }
+
+  Future<void> selectDateForReminder(
       context, selectedDate, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -35,13 +54,27 @@ class FoodGroceryController extends ChangeNotifier {
   NewFoodGroup get newFoodGroup => _newFoodGroup!;
 
   TextEditingController addNewGroupController = TextEditingController();
-  Future<void> addNewFoodGroup(String foodGroup) async {
+  Future<void> addNewFoodGroup(
+    String foodGroup,
+  ) async {
     try {
-      await firebaseFirestore.collection('food group').doc(foodGroup).set({});
+      print('Started adding************');
+      _newFoodGroup = NewFoodGroup(groupName: foodGroup);
+      await firebaseFirestore
+          .collection('foodGroup')
+          .doc(foodGroup)
+          .set(_newFoodGroup!.toMap());
     } catch (e) {
       print('Adding new food group failed : $e');
     }
+  }
 
+  Future<void> clearAddFoodFields() async {
+    nameController.clear();
+    dateController.clear();
+    reminderDateController.clear();
+    selectGroupController.clear();
+    notesController.clear();
     notifyListeners();
   }
 }

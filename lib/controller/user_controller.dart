@@ -242,7 +242,13 @@ class UserController extends ChangeNotifier {
     }
   }
 
-  //-------------------------Fetch Food Group-------------------------------------
+  //-------------------------Fetch Food Group-----------------------------------
+  var currentItem = 'ALL ITEMS';
+  changeCurrentItem(String newValue) {
+    currentItem = newValue;
+    notifyListeners();
+  }
+
   NewFoodGroup? _newFoodGroup;
   NewFoodGroup get newFoodGroup => _newFoodGroup!;
 
@@ -253,7 +259,7 @@ class UserController extends ChangeNotifier {
     try {
       foodGroupList.clear();
       CollectionReference foodGroupRef =
-          firebaseFirestore.collection('food group');
+          firebaseFirestore.collection('foodGroup');
       QuerySnapshot foodGroupSnapshot = await foodGroupRef.get();
 
       for (var doc in foodGroupSnapshot.docs) {
@@ -287,5 +293,215 @@ class UserController extends ChangeNotifier {
       );
     }
     // notifyListeners();
+  }
+
+  //----------------------ADD FOOD&GROCERY--------------------------------------
+
+  FoodGroceryModel? _foodGroceryModel;
+  FoodGroceryModel get foodGroceryModel => _foodGroceryModel!;
+
+  Future<void> storeFoodGrocery(
+      String foodGroceryid,
+      String foodGroceryName,
+      String foodGroceryExpiryDate,
+      String foodGroceryReminder,
+      String foodGroceryGroup,
+      String foodGroceryNote,
+      String expiryDate) async {
+    try {
+      _foodGroceryModel = FoodGroceryModel(
+          foodGroceryid: foodGroceryid,
+          foodGroceryName: foodGroceryName,
+          foodGroceryExpiryDate: foodGroceryExpiryDate,
+          foodGroceryReminder: foodGroceryReminder,
+          foodGroceryGroup: foodGroceryGroup,
+          foodGroceryNote: foodGroceryNote,
+          expiryDate: expiryDate);
+
+      await firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('food&grocery')
+          .doc(foodGroceryid)
+          .set(_foodGroceryModel!.toMap());
+      notifyListeners();
+    } catch (e) {
+      print('Storing food & grocery failed : $e');
+    }
+  }
+
+  //--------------------------------FETCH FOOD&GROCERY--------------------------
+
+  String? _foodGroceryid;
+  String get foodGroceryid => _foodGroceryid!;
+
+  List<FoodGroceryModel> foodGroceryList = [];
+  FoodGroceryModel? foodGroceries;
+
+  Future filterItems(String item) async {
+    try {
+      print('*********Filtering with $item***********************');
+      foodGroceryList.clear();
+      CollectionReference foodGroceryRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('food&grocery');
+      QuerySnapshot foodGrocerySnapshot =
+          await foodGroceryRef.where('foodGroceryGroup', isEqualTo: item).get();
+
+      for (var doc in foodGrocerySnapshot.docs) {
+        String foodGroceryid = doc['foodGroceryid'];
+        String foodGroceryName = doc['foodGroceryName'];
+        String foodGroceryExpiryDate = doc['foodGroceryExpiryDate'];
+        String foodGroceryReminder = doc['foodGroceryReminder'];
+        String foodGroceryGroup = doc['foodGroceryGroup'];
+        String foodGroceryNote = doc['foodGroceryNote'];
+        String expiryDate = doc['expiryDate'];
+
+        foodGroceries = FoodGroceryModel(
+          foodGroceryid: foodGroceryid,
+          foodGroceryName: foodGroceryName,
+          foodGroceryExpiryDate: foodGroceryExpiryDate,
+          foodGroceryReminder: foodGroceryReminder,
+          foodGroceryGroup: foodGroceryGroup,
+          foodGroceryNote: foodGroceryNote,
+          expiryDate: expiryDate,
+        );
+        foodGroceryList.add(foodGroceries!);
+      }
+    } catch (e) {
+      print('FoodGrocery Fetch Failed : $e');
+    }
+  }
+
+  Future fetchFoodGrocery() async {
+    try {
+      print('*********Fetching FoodGroceries***********************');
+      foodGroceryList.clear();
+      CollectionReference foodGroceryRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('food&grocery');
+      QuerySnapshot foodGrocerySnapshot = await foodGroceryRef.get();
+
+      for (var doc in foodGrocerySnapshot.docs) {
+        String foodGroceryid = doc['foodGroceryid'];
+        String foodGroceryName = doc['foodGroceryName'];
+        String foodGroceryExpiryDate = doc['foodGroceryExpiryDate'];
+        String foodGroceryReminder = doc['foodGroceryReminder'];
+        String foodGroceryGroup = doc['foodGroceryGroup'];
+        String foodGroceryNote = doc['foodGroceryNote'];
+        String expiryDate = doc['expiryDate'];
+
+        foodGroceries = FoodGroceryModel(
+          foodGroceryid: foodGroceryid,
+          foodGroceryName: foodGroceryName,
+          foodGroceryExpiryDate: foodGroceryExpiryDate,
+          foodGroceryReminder: foodGroceryReminder,
+          foodGroceryGroup: foodGroceryGroup,
+          foodGroceryNote: foodGroceryNote,
+          expiryDate: expiryDate,
+        );
+        foodGroceryList.add(foodGroceries!);
+      }
+    } catch (e) {
+      print('FoodGrocery Fetch Failed : $e');
+    }
+  }
+
+  Future fetchFoodGrocerySoonExpire() async {
+    try {
+      print(
+          '*********Fetching FoodGroceries Soon Expire***********************');
+      foodGroceryList.clear();
+
+      CollectionReference foodGroceryRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('food&grocery');
+
+      QuerySnapshot foodGrocerySnapshot = await foodGroceryRef.get();
+
+      DateTime currentDate = DateTime.now();
+
+      for (var doc in foodGrocerySnapshot.docs) {
+        String foodGroceryid = doc['foodGroceryid'];
+        String foodGroceryName = doc['foodGroceryName'];
+        String foodGroceryExpiryDate = doc['foodGroceryExpiryDate'];
+        String foodGroceryReminder = doc['foodGroceryReminder'];
+        String foodGroceryGroup = doc['foodGroceryGroup'];
+        String foodGroceryNote = doc['foodGroceryNote'];
+        String expiryDate = doc['expiryDate'];
+
+        DateTime expirationDateTime = DateTime.parse(expiryDate);
+        int daysUntilExpiration =
+            expirationDateTime.difference(currentDate).inDays;
+
+        print('Days Unitl Expiry :$daysUntilExpiration');
+
+        if (daysUntilExpiration <= 5 && daysUntilExpiration >= 0) {
+          foodGroceries = FoodGroceryModel(
+            foodGroceryid: foodGroceryid,
+            foodGroceryName: foodGroceryName,
+            foodGroceryExpiryDate: foodGroceryExpiryDate,
+            foodGroceryReminder: foodGroceryReminder,
+            foodGroceryGroup: foodGroceryGroup,
+            foodGroceryNote: foodGroceryNote,
+            expiryDate: expiryDate,
+          );
+          foodGroceryList.add(foodGroceries!);
+        }
+      }
+    } catch (e) {
+      print('FoodGrocery Fetch Failed : $e');
+    }
+  }
+
+  Future fetchFoodGroceryExpired() async {
+    try {
+      print(
+          '*********Fetching FoodGroceries Soon Expire***********************');
+      foodGroceryList.clear();
+
+      CollectionReference foodGroceryRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('food&grocery');
+
+      QuerySnapshot foodGrocerySnapshot = await foodGroceryRef.get();
+
+      DateTime currentDate = DateTime.now();
+
+      for (var doc in foodGrocerySnapshot.docs) {
+        String foodGroceryid = doc['foodGroceryid'];
+        String foodGroceryName = doc['foodGroceryName'];
+        String foodGroceryExpiryDate = doc['foodGroceryExpiryDate'];
+        String foodGroceryReminder = doc['foodGroceryReminder'];
+        String foodGroceryGroup = doc['foodGroceryGroup'];
+        String foodGroceryNote = doc['foodGroceryNote'];
+        String expiryDate = doc['expiryDate'];
+
+        DateTime expirationDateTime = DateTime.parse(expiryDate);
+        int daysUntilExpiration =
+            expirationDateTime.difference(currentDate).inDays;
+
+        print('Days Unitl Expiry :$daysUntilExpiration');
+
+        if (daysUntilExpiration < 0) {
+          foodGroceries = FoodGroceryModel(
+            foodGroceryid: foodGroceryid,
+            foodGroceryName: foodGroceryName,
+            foodGroceryExpiryDate: foodGroceryExpiryDate,
+            foodGroceryReminder: foodGroceryReminder,
+            foodGroceryGroup: foodGroceryGroup,
+            foodGroceryNote: foodGroceryNote,
+            expiryDate: expiryDate,
+          );
+          foodGroceryList.add(foodGroceries!);
+        }
+      }
+    } catch (e) {
+      print('FoodGrocery Fetch Failed : $e');
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/food%20&%20groceries/add_items.dart';
 import 'package:swiperight/views/categories/food%20&%20groceries/settings.dart';
+import 'package:swiperight/views/categories/medicines/add_medicines.dart';
 import 'package:swiperight/views/categories/medicines/medicine_all_items.dart';
 import 'package:swiperight/views/categories/medicines/medicine_expire_soon_items.dart';
 import 'package:swiperight/views/categories/medicines/medicine_expired_items.dart';
@@ -89,7 +90,7 @@ class Medicines extends StatelessWidget {
                             ElevatedButton.icon(
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const AddItems(),
+                                  builder: (context) => const AddMedicines(),
                                 ));
                               },
                               icon: const Icon(

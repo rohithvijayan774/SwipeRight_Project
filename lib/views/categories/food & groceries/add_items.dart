@@ -184,10 +184,10 @@ class AddItems extends StatelessWidget {
                                               },
                                               onTap: () {
                                                 foodGroceryAddController
-                                                    .selectDate(
+                                                    .selectDateForExpiry(
                                                         context,
                                                         foodGroceryAddController
-                                                            .selectedDate,
+                                                            .selectedFormattedDate,
                                                         foodGroceryAddController
                                                             .dateController);
                                               },
@@ -213,6 +213,7 @@ class AddItems extends StatelessWidget {
                             const SizedBox(
                               height: 20,
                             ),
+
                             Container(
                               width: width,
                               height: height * 0.09,
@@ -256,12 +257,13 @@ class AddItems extends StatelessWidget {
                                                 }
                                               },
                                               onTap: () {
-                                                foodGroceryAddController.selectDate(
-                                                    context,
-                                                    foodGroceryAddController
-                                                        .selectedReminderDate,
-                                                    foodGroceryAddController
-                                                        .reminderDateController);
+                                                foodGroceryAddController
+                                                    .selectDateForReminder(
+                                                        context,
+                                                        foodGroceryAddController
+                                                            .selectedReminderDate,
+                                                        foodGroceryAddController
+                                                            .reminderDateController);
                                               },
                                               decoration: const InputDecoration(
                                                 border: InputBorder.none,
@@ -339,12 +341,22 @@ class AddItems extends StatelessWidget {
                                                                 .map(
                                                                     (foodGroup) {
                                                           return DropdownMenuItem(
+                                                            value: foodGroup,
                                                             child: Text(
-                                                                foodGroup
-                                                                    .groupName),
+                                                              foodGroup
+                                                                  .groupName,
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      'SofiaPro'),
+                                                            ),
                                                           );
                                                         }).toList(),
-                                                        onChanged: (value) {},
+                                                        onChanged: (value) {
+                                                          foodGroceryAddController
+                                                                  .selectGroupController
+                                                                  .text =
+                                                              value!.groupName;
+                                                        },
                                                         decoration: const InputDecoration(
                                                             hintText:
                                                                 'Category',
@@ -384,13 +396,16 @@ class AddItems extends StatelessWidget {
                                                                   ),
                                                                   ElevatedButton(
                                                                     onPressed:
-                                                                        () {
-                                                                      foodGroceryAddController.addNewFoodGroup(foodGroceryAddController
-                                                                          .addNewGroupController
-                                                                          .text);
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
+                                                                        () async {
+                                                                      await foodGroceryAddController
+                                                                          .addNewFoodGroup(foodGroceryAddController
+                                                                              .addNewGroupController
+                                                                              .text)
+                                                                          .then(
+                                                                            (value) => userAddFoodController.fetchFoodGroup().then(
+                                                                                  (value) => Navigator.of(context).pop(),
+                                                                                ),
+                                                                          );
                                                                     },
                                                                     child: const Text(
                                                                         'Add'),
@@ -490,8 +505,29 @@ class AddItems extends StatelessWidget {
                                 if (foodGroceryAddController
                                     .addFoodItemsKey.currentState!
                                     .validate()) {
-                                  print(foodGroceryAddController
-                                      .nameController.text);
+                                  userAddFoodController
+                                      .storeFoodGrocery(
+                                          "${foodGroceryAddController.nameController.text} ${DateTime.now()}",
+                                          foodGroceryAddController
+                                              .nameController.text,
+                                          foodGroceryAddController
+                                              .dateController.text,
+                                          foodGroceryAddController
+                                              .reminderDateController.text,
+                                          foodGroceryAddController
+                                              .selectGroupController.text,
+                                          foodGroceryAddController
+                                              .notesController.text,
+                                          foodGroceryAddController.expiryDate
+                                              .toString())
+                                      .then(
+                                        (value) => foodGroceryAddController
+                                            .clearAddFoodFields()
+                                            .then(
+                                              (value) =>
+                                                  Navigator.of(context).pop(),
+                                            ),
+                                      );
                                 }
                               },
                               icon: const Icon(

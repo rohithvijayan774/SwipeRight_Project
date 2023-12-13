@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:swiperight/const.dart';
 
-class AddItems extends StatelessWidget {
-  const AddItems({super.key});
+class AddMedicines extends StatelessWidget {
+  const AddMedicines({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +323,7 @@ class AddItems extends StatelessWidget {
                                                 Expanded(
                                                   child:
                                                       DropdownButtonFormField(
-                                                    items:const [],
+                                                    items: const [],
                                                     onChanged: (value) {},
                                                     decoration: const InputDecoration(
                                                         hintText: 'Category',

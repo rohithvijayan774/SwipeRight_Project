@@ -5,6 +5,7 @@ class FoodGroceryModel {
   String foodGroceryReminder;
   String foodGroceryGroup;
   String foodGroceryNote;
+  String expiryDate;
 
   FoodGroceryModel({
     required this.foodGroceryid,
@@ -13,16 +14,19 @@ class FoodGroceryModel {
     required this.foodGroceryReminder,
     required this.foodGroceryGroup,
     required this.foodGroceryNote,
+    required this.expiryDate,
   });
 
   factory FoodGroceryModel.fromMap(Map<String, dynamic> map) {
     return FoodGroceryModel(
-        foodGroceryid: map['foodGroceryid'],
-        foodGroceryName: map['foodGroceryName'],
-        foodGroceryExpiryDate: map['foodGroceryExpiryDate'],
-        foodGroceryReminder: map['foodGroceryReminder'],
-        foodGroceryGroup: map['foodGroceryGroup'],
-        foodGroceryNote: map['foodGroceryNote']);
+      foodGroceryid: map['foodGroceryid'],
+      foodGroceryName: map['foodGroceryName'],
+      foodGroceryExpiryDate: map['foodGroceryExpiryDate'],
+      foodGroceryReminder: map['foodGroceryReminder'],
+      foodGroceryGroup: map['foodGroceryGroup'],
+      foodGroceryNote: map['foodGroceryNote'],
+      expiryDate: map['expiryDate'],
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -33,6 +37,7 @@ class FoodGroceryModel {
       'foodGroceryReminder': foodGroceryReminder,
       'foodGroceryGroup': foodGroceryGroup,
       'foodGroceryNote': foodGroceryNote,
+      'expiryDate': expiryDate,
     };
   }
 }

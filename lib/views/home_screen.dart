@@ -7,7 +7,7 @@ import 'package:swiperight/views/categories/food%20&%20groceries/food_groceries.
 import 'package:swiperight/views/categories/insurance/insure_users_list.dart';
 import 'package:swiperight/views/categories/medicines/medicines.dart';
 import 'package:swiperight/views/categories/recharge/mobile/recharge_type.dart';
-import 'package:swiperight/views/splash_screen.dart';
+import 'package:swiperight/views/list_sample.dart';
 import 'package:swiperight/widgets/home_screen_category_tile.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -23,10 +23,13 @@ class HomeScreen extends StatelessWidget {
         child:
             Consumer<UserController>(builder: (context, userHomeController, _) {
           return FutureBuilder(
-              future: userHomeController
-                  .fetchUserData()
-                  .then((value) => userHomeController.fetchFoodGroup()),
+              future: userHomeController.fetchUserData(),
               builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
                 return Column(
                   children: [
                     SizedBox(
@@ -50,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const SplashScreen(),
+                                            const ListSample(),
                                       ),
                                     );
                                   },
@@ -107,12 +110,13 @@ class HomeScreen extends StatelessWidget {
                                   tileColor: const Color(0xFFD9FFE1),
                                   iconColor: Colors.green,
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const FoodAndGroceries(),
-                                      ),
-                                    );
+                                    userHomeController.fetchFoodGroup().then(
+                                        (value) => Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const FoodAndGroceries(),
+                                              ),
+                                            ));
                                   },
                                 ),
                                 HomeScreenCategoryTile(
