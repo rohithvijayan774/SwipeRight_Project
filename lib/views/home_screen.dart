@@ -125,11 +125,13 @@ class HomeScreen extends StatelessWidget {
                                   tileColor: const Color(0xFF0D5981),
                                   iconColor: const Color(0xFFEE90DF),
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => const Medicines(),
-                                      ),
-                                    );
+                                    userHomeController.fetchAllMedicines().then(
+                                        (value) => Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Medicines(),
+                                              ),
+                                            ));
                                   },
                                 ),
                               ],

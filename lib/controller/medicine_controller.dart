@@ -1,21 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:swiperight/models/food_grocery_model.dart';
+import 'package:swiperight/models/medcine_model.dart';
 
-class FoodGroceryController extends ChangeNotifier {
+class MedicineController extends ChangeNotifier {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  final addFoodItemsKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController reminderDateController = TextEditingController();
-  TextEditingController selectGroupController = TextEditingController();
-  TextEditingController notesController = TextEditingController();
+  final addMedicineKey = GlobalKey<FormState>();
+  TextEditingController medicineNameController = TextEditingController();
+  TextEditingController medicineDateController = TextEditingController();
+  TextEditingController medicineReminderDateController =
+      TextEditingController();
+  TextEditingController medicineSelectGroupController = TextEditingController();
+  TextEditingController medicineNotesController = TextEditingController();
   DateTime? expiryDate;
   DateTime? selectedFormattedDate;
   DateTime? selectedReminderDate;
 
-  Future<void> selectDateForExpiry(
+  Future<void> selectDateForMedicineExpiry(
       context, selectedDate, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -32,7 +33,7 @@ class FoodGroceryController extends ChangeNotifier {
     }
   }
 
-  Future<void> selectDateForReminder(
+  Future<void> selectDateForMedicineReminder(
       context, selectedDate, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -49,31 +50,31 @@ class FoodGroceryController extends ChangeNotifier {
 
 //----------------------------ADD NEW GROUP-------------------------------------
 
-  NewFoodGroup? _newFoodGroup;
-  NewFoodGroup get newFoodGroup => _newFoodGroup!;
+  NewMedicineGroup? _newMedicineGroup;
+  NewMedicineGroup get newMedicineGroup => _newMedicineGroup!;
 
-  TextEditingController addNewGroupController = TextEditingController();
-  Future<void> addNewFoodGroup(
-    String foodGroup,
+  TextEditingController addNewMedicineGroupController = TextEditingController();
+  Future<void> addNewMedicineGroup(
+    String medicineGroup,
   ) async {
     try {
       print('Started adding************');
-      _newFoodGroup = NewFoodGroup(groupName: foodGroup);
+      _newMedicineGroup = NewMedicineGroup(groupName: medicineGroup);
       await firebaseFirestore
-          .collection('foodGroup')
-          .doc(foodGroup)
-          .set(_newFoodGroup!.toMap());
+          .collection('medicineGroup')
+          .doc(medicineGroup)
+          .set(_newMedicineGroup!.toMap());
     } catch (e) {
       print('Adding new food group failed : $e');
     }
   }
 
-  Future<void> clearAddFoodFields() async {
-    nameController.clear();
-    dateController.clear();
-    reminderDateController.clear();
-    selectGroupController.clear();
-    notesController.clear();
+  Future<void> clearMedicineFields() async {
+    medicineNameController.clear();
+    medicineDateController.clear();
+    medicineReminderDateController.clear();
+    medicineSelectGroupController.clear();
+    medicineNotesController.clear();
     notifyListeners();
   }
 }

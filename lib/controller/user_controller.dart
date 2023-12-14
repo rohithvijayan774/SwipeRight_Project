@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiperight/models/food_grocery_model.dart';
+import 'package:swiperight/models/medcine_model.dart';
 import 'package:swiperight/models/user_model.dart';
 import 'package:swiperight/utils/tab_view_home.dart';
 import 'package:swiperight/views/create_new_password.dart';
@@ -502,6 +503,193 @@ class UserController extends ChangeNotifier {
       }
     } catch (e) {
       print('FoodGrocery Fetch Failed : $e');
+    }
+  }
+
+  //----------------------------ADD FETCH MEDICINE------------------------------
+
+  NewMedicineGroup? _newMedicineGroup;
+  NewMedicineGroup get newMedicineGroup => _newMedicineGroup!;
+
+  List<NewMedicineGroup> medicineGroupList = [];
+  NewMedicineGroup? newMedGroup;
+
+  Future<void> fetchMedicineGroup() async {
+    try {
+      medicineGroupList.clear();
+      CollectionReference medicineGroupRef =
+          firebaseFirestore.collection('medicineGroup');
+      QuerySnapshot foodGroupSnapshot = await medicineGroupRef.get();
+
+      for (var doc in foodGroupSnapshot.docs) {
+        String groupName = doc['groupName'];
+
+        newMedGroup = NewMedicineGroup(groupName: groupName);
+        medicineGroupList.add(newMedGroup!);
+      }
+    } catch (e) {
+      print('Food Group Fetching Failed : $e');
+    }
+    notifyListeners();
+  }
+
+  MedicineModel? _medicineModel;
+  MedicineModel get medicineModel => _medicineModel!;
+
+  Future<void> storeMedicine(
+      String medicineid,
+      String medicineName,
+      String medicineExpiryDate,
+      String medicineReminder,
+      String medicineGroup,
+      String medicineNote,
+      String expiryDate) async {
+    try {
+      _medicineModel = MedicineModel(
+          medicineid: medicineid,
+          medicineName: medicineName,
+          medicineExpiryDate: medicineExpiryDate,
+          medicineReminder: medicineReminder,
+          medicineGroup: medicineGroup,
+          medicineNote: medicineNote,
+          expiryDate: expiryDate);
+
+      await firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('medicines')
+          .doc(medicineid)
+          .set(_medicineModel!.toMap());
+      notifyListeners();
+    } catch (e) {
+      print('Storing food & grocery failed : $e');
+    }
+  }
+
+  String? _medicineid;
+  String get medicineid => _medicineid!;
+
+  List<MedicineModel> medicinesList = [];
+  MedicineModel? medicines;
+  //99980105697895
+
+  //jj060514541iN - speedpost
+
+  Future fetchAllMedicines() async {
+    try {
+      print('*********Fetching Medicines***********************');
+      medicinesList.clear();
+      CollectionReference medicinesRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('medicines');
+      QuerySnapshot medicinesSnapshot = await medicinesRef.get();
+
+      for (var doc in medicinesSnapshot.docs) {
+        String medicineid = doc['medicineid'];
+        String medicineName = doc['medicineName'];
+        String medicineExpiryDate = doc['medicineExpiryDate'];
+        String medicineReminder = doc['medicineReminder'];
+        String medicineGroup = doc['medicineGroup'];
+        String medicineNote = doc['medicineNote'];
+        String expiryDate = doc['expiryDate'];
+
+        medicines = MedicineModel(
+            medicineid: medicineid,
+            medicineName: medicineName,
+            medicineExpiryDate: medicineExpiryDate,
+            medicineReminder: medicineReminder,
+            medicineGroup: medicineGroup,
+            medicineNote: medicineNote,
+            expiryDate: expiryDate);
+        medicinesList.add(medicines!);
+      }
+    } catch (e) {
+      print('Medicine Fetch Failed : $e');
+    }
+  }
+
+  Future fetchMedicinesSoonExpire() async {
+    try {
+      print('*********Fetching Medicines***********************');
+      medicinesList.clear();
+      CollectionReference medicinesRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('medicines');
+      QuerySnapshot medicinesSnapshot = await medicinesRef.get();
+
+      DateTime currentDate = DateTime.now();
+
+      for (var doc in medicinesSnapshot.docs) {
+        String medicineid = doc['medicineid'];
+        String medicineName = doc['medicineName'];
+        String medicineExpiryDate = doc['medicineExpiryDate'];
+        String medicineReminder = doc['medicineReminder'];
+        String medicineGroup = doc['medicineGroup'];
+        String medicineNote = doc['medicineNote'];
+        String expiryDate = doc['expiryDate'];
+
+        DateTime expirationDateTime = DateTime.parse(expiryDate);
+        int daysUntilExpiration =
+            expirationDateTime.difference(currentDate).inDays;
+
+        if (daysUntilExpiration <= 5 && daysUntilExpiration >= 0) {
+          medicines = MedicineModel(
+              medicineid: medicineid,
+              medicineName: medicineName,
+              medicineExpiryDate: medicineExpiryDate,
+              medicineReminder: medicineReminder,
+              medicineGroup: medicineGroup,
+              medicineNote: medicineNote,
+              expiryDate: expiryDate);
+          medicinesList.add(medicines!);
+        }
+      }
+    } catch (e) {
+      print('Medicine Fetch Failed : $e');
+    }
+  }
+
+  Future fetchMedicinesExpired() async {
+    try {
+      print('*********Fetching Medicines***********************');
+      medicinesList.clear();
+      CollectionReference medicinesRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('medicines');
+      QuerySnapshot medicinesSnapshot = await medicinesRef.get();
+
+      DateTime currentDate = DateTime.now();
+
+      for (var doc in medicinesSnapshot.docs) {
+        String medicineid = doc['medicineid'];
+        String medicineName = doc['medicineName'];
+        String medicineExpiryDate = doc['medicineExpiryDate'];
+        String medicineReminder = doc['medicineReminder'];
+        String medicineGroup = doc['medicineGroup'];
+        String medicineNote = doc['medicineNote'];
+        String expiryDate = doc['expiryDate'];
+
+        DateTime expirationDateTime = DateTime.parse(expiryDate);
+        int daysUntilExpiration =
+            expirationDateTime.difference(currentDate).inDays;
+
+        if (daysUntilExpiration < 0) {
+          medicines = MedicineModel(
+              medicineid: medicineid,
+              medicineName: medicineName,
+              medicineExpiryDate: medicineExpiryDate,
+              medicineReminder: medicineReminder,
+              medicineGroup: medicineGroup,
+              medicineNote: medicineNote,
+              expiryDate: expiryDate);
+          medicinesList.add(medicines!);
+        }
+      }
+    } catch (e) {
+      print('Medicine Fetch Failed : $e');
     }
   }
 }
