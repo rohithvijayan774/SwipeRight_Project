@@ -36,6 +36,7 @@ dependencies:
   firebase_core: ^2.24.0
   flutter:
     sdk: flutter
+  iconsax: ^0.0.8
   intl: ^0.18.1
   provider: ^6.1.1
   shared_preferences: ^2.2.2

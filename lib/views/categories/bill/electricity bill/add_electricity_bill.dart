@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
+import 'package:swiperight/views/categories/bill/electricity%20bill/bills_list.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/electricity_bill_view.dart';
 
 class PayElectricityBills extends StatelessWidget {
@@ -126,11 +127,10 @@ class PayElectricityBills extends StatelessWidget {
                                       onTap: () {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                ElectricityBillView(
-                                                    logos: logos[index],
-                                                    header: electricityBoards[
-                                                        index]),
+                                            builder: (context) => BillsList(
+                                                logos: logos[index],
+                                                header:
+                                                    electricityBoards[index]),
                                           ),
                                         );
                                       },

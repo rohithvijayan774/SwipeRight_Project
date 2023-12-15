@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
+import 'package:swiperight/controller/user_controller.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/bills_list.dart';
 
 class ElectricityBillView extends StatelessWidget {
@@ -15,6 +17,7 @@ class ElectricityBillView extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final elecBillAddPro = Provider.of<UserController>(context, listen: false);
     return Scaffold(
       backgroundColor: defaultBgColor,
       body: SafeArea(
@@ -78,174 +81,201 @@ class ElectricityBillView extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return '*this field is required';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                cursorColor: Colors.white,
-                                decoration: const InputDecoration(
-                                  hintText: 'Consumer Number',
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'SofiaPro',
-                                    color: Colors.white,
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
+                          child: Form(
+                            key: elecBillAddPro.elecBillFormKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 20,
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return '*this field is required';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                cursorColor: Colors.white,
-                                decoration: const InputDecoration(
-                                  hintText: 'Customer Name',
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'SofiaPro',
-                                    color: Colors.white,
+                                TextFormField(
+                                  controller: elecBillAddPro
+                                      .elecConsumerNumberController,
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '*this field is required';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  cursorColor: Colors.white,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Consumer Number',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'SofiaPro',
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
                                   ),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return '*this field is required';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                cursorColor: Colors.white,
-                                decoration: const InputDecoration(
-                                  hintText: 'Amount',
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'SofiaPro',
-                                    color: Colors.white,
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  controller:
+                                      elecBillAddPro.elecCustomerNameController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '*this field is required';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  cursorColor: Colors.white,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Customer Name',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'SofiaPro',
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
                                   ),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return '*this field is required';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                cursorColor: Colors.white,
-                                decoration: const InputDecoration(
-                                  hintText: 'Bill Date',
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'SofiaPro',
-                                    color: Colors.white,
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  controller:
+                                      elecBillAddPro.elecBillAmountController,
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '*this field is required';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  cursorColor: Colors.white,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Amount',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'SofiaPro',
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
                                   ),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return '*this field is required';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                cursorColor: Colors.white,
-                                decoration: const InputDecoration(
-                                  hintText: 'Due Date',
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'SofiaPro',
-                                    color: Colors.white,
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  controller:
+                                      elecBillAddPro.elecBillDateController,
+                                  onTap: () => elecBillAddPro.selectDate(
+                                      context,
+                                      elecBillAddPro.selectedFormattedDate,
+                                      elecBillAddPro.elecBillDateController),
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '*this field is required';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  cursorColor: Colors.white,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Bill Date',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'SofiaPro',
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
                                   ),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return '*this field is required';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                cursorColor: Colors.white,
-                                decoration: const InputDecoration(
-                                  hintText: 'Reminding Date',
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'SofiaPro',
-                                    color: Colors.white,
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  controller:
+                                      elecBillAddPro.elecDueDateController,
+                                  onTap: () => elecBillAddPro.selectDate(
+                                      context,
+                                      elecBillAddPro.selectedFormattedDate,
+                                      elecBillAddPro.elecDueDateController),
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '*this field is required';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  cursorColor: Colors.white,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Due Date',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'SofiaPro',
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
                                   ),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  controller:
+                                      elecBillAddPro.elecRemiderDateController,
+                                  onTap: () => elecBillAddPro.selectDate(
+                                      context,
+                                      elecBillAddPro.selectedFormattedDate,
+                                      elecBillAddPro.elecRemiderDateController),
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '*this field is required';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  cursorColor: Colors.white,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Reminding Date',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'SofiaPro',
+                                      color: Colors.white,
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white)),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -254,14 +284,31 @@ class ElectricityBillView extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => BillsList(
-                                header: header,
-                                logos: logos,
-                              ),
-                            ),
-                          );
+                          if (elecBillAddPro.elecBillFormKey.currentState!
+                              .validate()) {
+                            elecBillAddPro
+                                .storeElectricityBill(
+                                    int.parse(elecBillAddPro
+                                        .elecConsumerNumberController.text),
+                                    elecBillAddPro
+                                        .elecCustomerNameController.text,
+                                    int.parse(elecBillAddPro
+                                        .elecBillAmountController.text),
+                                    elecBillAddPro.elecBillDateController.text,
+                                    elecBillAddPro.elecDueDateController.text,
+                                    elecBillAddPro
+                                        .elecRemiderDateController.text,
+                                    header)
+                                .then(
+                                  (value) =>
+                                      Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => BillsList(
+                                          header: header, logos: logos),
+                                    ),
+                                  ),
+                                );
+                          }
                         },
                         child: Container(
                           color: const Color.fromARGB(123, 13, 72, 161),

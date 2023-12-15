@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/controller/admin_controller.dart';
 import 'package:swiperight/views/forgot_password.dart';
-import 'package:swiperight/views/register_screen.dart';
 import 'package:swiperight/views/welcome_page.dart';
 
 class AdminLoginScreen extends StatelessWidget {

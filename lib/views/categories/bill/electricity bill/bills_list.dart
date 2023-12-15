@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
+import 'package:swiperight/views/categories/bill/electricity%20bill/electricity_bill_view.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/pay_electricity_bill.dart';
 
 class BillsList extends StatelessWidget {
@@ -125,6 +126,17 @@ class BillsList extends StatelessWidget {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ElectricityBillView(
+              header: header,
+              logos: logos,
+            ),
+          ));
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

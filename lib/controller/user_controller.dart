@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swiperight/models/electricity_bill_model.dart';
 import 'package:swiperight/models/food_grocery_model.dart';
 import 'package:swiperight/models/medcine_model.dart';
 import 'package:swiperight/models/user_model.dart';
@@ -571,9 +573,6 @@ class UserController extends ChangeNotifier {
 
   List<MedicineModel> medicinesList = [];
   MedicineModel? medicines;
-  //99980105697895
-
-  //jj060514541iN - speedpost
 
   Future fetchAllMedicines() async {
     try {
@@ -690,6 +689,104 @@ class UserController extends ChangeNotifier {
       }
     } catch (e) {
       print('Medicine Fetch Failed : $e');
+    }
+  }
+
+  //-----------------------ADD&FETCH ELECTRICITY BILLS--------------------------
+
+  ElectricityBillModel? _electricityBillModel;
+  ElectricityBillModel get electricityBillModel => _electricityBillModel!;
+  TextEditingController elecConsumerNumberController = TextEditingController();
+  TextEditingController elecCustomerNameController = TextEditingController();
+  TextEditingController elecBillAmountController = TextEditingController();
+  TextEditingController elecBillDateController = TextEditingController();
+  TextEditingController elecDueDateController = TextEditingController();
+  TextEditingController elecRemiderDateController = TextEditingController();
+  final elecBillFormKey = GlobalKey<FormState>();
+
+  Future<void> storeElectricityBill(
+    int consumerNumber,
+    String customerName,
+    int billAmount,
+    String billDate,
+    String dueDate,
+    String reminderDate,
+    String electricityBoard,
+  ) async {
+    try {
+      _electricityBillModel = ElectricityBillModel(
+          consumerNumber: consumerNumber,
+          customerName: customerName,
+          billAmount: billAmount,
+          billDate: billDate,
+          dueDate: dueDate,
+          reminderDate: reminderDate,
+          electricityBoard: electricityBoard);
+
+      final data = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid);
+      final docs = data.collection('electricityBill').doc();
+      docs.set(_electricityBillModel!.toMap(docs.id));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<ElectricityBillModel> elecBillsList = [];
+  ElectricityBillModel? elecBills;
+
+  Future fetchElecBills(electricityBoard) async {
+    try {
+      elecBillsList.clear();
+      CollectionReference elecBillRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('electricityBill');
+      QuerySnapshot elecBillSnapshot = await elecBillRef
+          .where('electricytBoard', isEqualTo: electricityBoard)
+          .get();
+
+      for (var doc in elecBillSnapshot.docs) {
+        String billid = doc['billid'];
+        int consumerNumber = doc['consumerNumber'];
+        String customerName = doc['customerName'];
+        int billAmount = doc['billAmount'];
+        String billDate = doc['billDate'];
+        String dueDate = doc['dueDate'];
+        String reminderDate = doc['reminderDate'];
+        String electricityBoard = doc['electricityBoard'];
+
+        elecBills = ElectricityBillModel(
+            billid: billid,
+            consumerNumber: consumerNumber,
+            customerName: customerName,
+            billAmount: billAmount,
+            billDate: billDate,
+            dueDate: dueDate,
+            reminderDate: reminderDate,
+            electricityBoard: electricityBoard);
+        elecBillsList.add(elecBills!);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  DateTime? selectedFormattedDate;
+
+  Future<void> selectDate(
+      context, selectedDate, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      selectedDate = picked;
+      controller.text = DateFormat('dd-MM-yyyy').format(picked);
     }
   }
 }
