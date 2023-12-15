@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:swiperight/controller/admin_controller.dart';
 import 'package:swiperight/controller/food_grocery_controller.dart';
 import 'package:swiperight/controller/medicine_controller.dart';
 import 'package:swiperight/controller/user_controller.dart';
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<MedicineController>(
           create: (context) => MedicineController(),
+        ),
+        ChangeNotifierProvider<AdminController>(
+          create: (context) => AdminController(),
         ),
       ],
       child: MaterialApp(

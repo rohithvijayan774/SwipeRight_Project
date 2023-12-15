@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
-import 'package:swiperight/controller/food_grocery_controller.dart';
-import 'package:swiperight/controller/medicine_controller.dart';
 import 'package:swiperight/controller/user_controller.dart';
 import 'package:swiperight/widgets/food_details_tile.dart';
 
