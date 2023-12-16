@@ -88,10 +88,10 @@ class PayInsurance extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                const PaymentModes(paymentAmount: 250),
-                          ));
+                          // Navigator.of(context).push(MaterialPageRoute(
+                          //   builder: (context) =>
+                          //       const PaymentModes(paymentAmount: 250),
+                          // ));
                         },
                         child: Container(
                           width: width,

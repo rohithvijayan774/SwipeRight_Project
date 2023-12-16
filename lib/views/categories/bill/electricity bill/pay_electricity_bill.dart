@@ -5,9 +5,23 @@ import 'package:swiperight/views/categories/bill/electricity%20bill/payment_mode
 class PayBill extends StatelessWidget {
   final String header;
   final String logos;
+  final String billid;
+  final int consumerNumber;
+  final String customerName;
+  final int billAmount;
+  final String billDate;
+  final String billDueDate;
+  final bool billStatus;
   const PayBill({
     required this.header,
     required this.logos,
+    required this.billid,
+    required this.consumerNumber,
+    required this.customerName,
+    required this.billAmount,
+    required this.billDate,
+    required this.billDueDate,
+    required this.billStatus,
     super.key,
   });
 
@@ -70,9 +84,9 @@ class PayBill extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Pending',
-                              style: TextStyle(
+                            Text(
+                              billStatus == true ? 'Paid' : 'Pending',
+                              style: const TextStyle(
                                   color: Colors.white, fontFamily: 'SofiaPro'),
                             ),
                             const SizedBox(
@@ -93,19 +107,19 @@ class PayBill extends StatelessWidget {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                const Column(
+                                Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Consumer Number',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'Poppins'),
                                     ),
                                     Text(
-                                      '1168157004033',
-                                      style: TextStyle(
+                                      consumerNumber.toString(),
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'SofiaPro'),
                                     ),
@@ -116,17 +130,17 @@ class PayBill extends StatelessWidget {
                             const SizedBox(
                               height: 30,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Customer Name : ',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Poppins'),
                                 ),
                                 Text(
-                                  'Name ',
-                                  style: TextStyle(
+                                  customerName,
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'SofiaPro'),
                                 ),
@@ -135,9 +149,9 @@ class PayBill extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Amount : ',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -145,8 +159,8 @@ class PayBill extends StatelessWidget {
                                       fontFamily: 'SofiaPro'),
                                 ),
                                 Text(
-                                  '₹ 1250/-',
-                                  style: TextStyle(
+                                  '₹ $billAmount/-',
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
                                       fontFamily: 'Poppins'),
@@ -156,9 +170,9 @@ class PayBill extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Bill Date : ',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -166,8 +180,8 @@ class PayBill extends StatelessWidget {
                                       fontFamily: 'SofiaPro'),
                                 ),
                                 Text(
-                                  '00/00/0000',
-                                  style: TextStyle(
+                                  billDate,
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
                                       fontFamily: 'SofiaPro'),
@@ -177,9 +191,9 @@ class PayBill extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Due Date : ',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -187,8 +201,8 @@ class PayBill extends StatelessWidget {
                                       fontFamily: 'SofiaPro'),
                                 ),
                                 Text(
-                                  '00/00/0000',
-                                  style: TextStyle(
+                                  billDueDate,
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
                                       fontFamily: 'SofiaPro'),
@@ -218,15 +232,24 @@ class PayBill extends StatelessWidget {
                                                 MaterialStatePropertyAll(
                                                     defaultBgColor)),
                                         onPressed: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) =>const PaymentModes(
-                                                paymentAmount: 1200),
-                                          ));
+                                          billStatus
+                                              ? null
+                                              : Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PaymentModes(
+                                                      paymentAmount: billAmount,
+                                                      billid: billid,
+                                                      billStatus: billStatus,
+                                                    ),
+                                                  ),
+                                                );
                                         },
-                                        child: const Text(
-                                          'PAY BILL',
-                                          style: TextStyle(
+                                        child: Text(
+                                          billStatus == true
+                                              ? 'ALREADY PAID'
+                                              : 'PAY BILL',
+                                          style: const TextStyle(
                                               fontSize: 15,
                                               color: Colors.white,
                                               fontFamily: 'Poppins'),

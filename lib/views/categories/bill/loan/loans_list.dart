@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
+import 'package:swiperight/controller/user_controller.dart';
+import 'package:swiperight/views/categories/bill/loan/add_loan_amount.dart';
 import 'package:swiperight/views/categories/bill/loan/pay_loan.dart';
+import 'package:swiperight/widgets/bill_tile.dart';
 
 class LoansList extends StatelessWidget {
   final String header;
@@ -55,73 +59,82 @@ class LoansList extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                PayLoan(header: header, logos: logos),
-                          ));
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          width: width,
-                          height: height * 0.10,
-                          decoration: BoxDecoration(
-                              color: const Color.fromARGB(93, 33, 149, 243),
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  image:
-                                      DecorationImage(image: AssetImage(logos)),
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        header,
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Poppins',
-                                            overflow: TextOverflow.ellipsis),
+              child: Consumer<UserController>(
+                  builder: (context, loanListController, _) {
+                return FutureBuilder(
+                    future: loanListController.fetchLoan(header),
+                    builder: (context, snapshot) {
+                      return snapshot.connectionState == ConnectionState.waiting
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : loanListController.loanList.isEmpty
+                              ? const Center(
+                                  child: Text('List is Empty'),
+                                )
+                              : ListView.separated(
+                                  itemBuilder: (context, index) {
+                                    return BillTile(
+                                        title: header,
+                                        logos: logos,
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) => PayLoan(
+                                                header: header,
+                                                logos: logos,
+                                                loanid: loanListController
+                                                    .loanList[index].loanid!,
+                                                loanAccountNumber:
+                                                    loanListController
+                                                        .loanList[index]
+                                                        .loanAccountNumber,
+                                                customerName: loanListController
+                                                    .loanList[index]
+                                                    .customerName,
+                                                loanAmount: loanListController
+                                                    .loanList[index].loanAmount,
+                                                mobileNumber: loanListController
+                                                    .loanList[index]
+                                                    .mobileNumber,
+                                                loanStatus: loanListController
+                                                    .loanList[index].loanStatus,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        consumerNumber: loanListController
+                                            .loanList[index].loanAccountNumber,
+                                        billStatus: loanListController
+                                            .loanList[index].loanStatus);
+                                  },
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                        height: 10,
                                       ),
-                                    ],
-                                  ),
-                                  const Text(
-                                    '1168157004033',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'SofiaPro'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+                                  itemCount:
+                                      loanListController.loanList.length);
+                    });
+              }),
             )
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        onPressed: () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => AddLoanAmount(
+                header: header,
+                logos: logos,
+              ),
+            ),
+          );
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
         ),
       ),
     );

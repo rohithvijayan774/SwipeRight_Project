@@ -17,7 +17,7 @@ class ElectricityBillView extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final elecBillAddPro = Provider.of<UserController>(context, listen: false);
+    final elecBillAddPro = Provider.of<UserController>(context);
     return Scaffold(
       backgroundColor: defaultBgColor,
       body: SafeArea(
@@ -283,22 +283,23 @@ class ElectricityBillView extends StatelessWidget {
                         height: 50,
                       ),
                       InkWell(
-                        onTap: () {
+                        onTap: () async {
                           if (elecBillAddPro.elecBillFormKey.currentState!
                               .validate()) {
-                            elecBillAddPro
+                            await elecBillAddPro
                                 .storeElectricityBill(
-                                    int.parse(elecBillAddPro
-                                        .elecConsumerNumberController.text),
-                                    elecBillAddPro
-                                        .elecCustomerNameController.text,
-                                    int.parse(elecBillAddPro
-                                        .elecBillAmountController.text),
-                                    elecBillAddPro.elecBillDateController.text,
-                                    elecBillAddPro.elecDueDateController.text,
-                                    elecBillAddPro
-                                        .elecRemiderDateController.text,
-                                    header)
+                                  int.parse(elecBillAddPro
+                                      .elecConsumerNumberController.text),
+                                  elecBillAddPro
+                                      .elecCustomerNameController.text,
+                                  int.parse(elecBillAddPro
+                                      .elecBillAmountController.text),
+                                  elecBillAddPro.elecBillDateController.text,
+                                  elecBillAddPro.elecDueDateController.text,
+                                  elecBillAddPro.elecRemiderDateController.text,
+                                  header,
+                                  false,
+                                )
                                 .then(
                                   (value) =>
                                       Navigator.of(context).pushReplacement(

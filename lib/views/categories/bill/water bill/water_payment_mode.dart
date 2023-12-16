@@ -4,11 +4,11 @@ import 'package:swiperight/const.dart';
 import 'package:swiperight/controller/user_controller.dart';
 import 'package:swiperight/utils/tab_view_home.dart';
 
-class PaymentModes extends StatefulWidget {
+class WaterPaymentModes extends StatefulWidget {
   final int paymentAmount;
   final String billid;
   final bool billStatus;
-  const PaymentModes({
+  const WaterPaymentModes({
     required this.paymentAmount,
     super.key,
     required this.billid,
@@ -16,10 +16,10 @@ class PaymentModes extends StatefulWidget {
   });
 
   @override
-  State<PaymentModes> createState() => _PaymentModesState();
+  State<WaterPaymentModes> createState() => _WaterPaymentModesState();
 }
 
-class _PaymentModesState extends State<PaymentModes> {
+class _WaterPaymentModesState extends State<WaterPaymentModes> {
   String selectedMode = 'GooglePay';
 
   @override
@@ -223,7 +223,7 @@ class _PaymentModesState extends State<PaymentModes> {
                         onTap: () {
                           print(selectedMode);
                           paymentController.updateBillStatus(
-                              'electricityBill', widget.billid, true);
+                              'waterBill', widget.billid, true);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                 builder: (context) => const TabViewHome(),

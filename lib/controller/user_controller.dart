@@ -6,8 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiperight/models/electricity_bill_model.dart';
 import 'package:swiperight/models/food_grocery_model.dart';
+import 'package:swiperight/models/loan_model.dart';
 import 'package:swiperight/models/medcine_model.dart';
 import 'package:swiperight/models/user_model.dart';
+import 'package:swiperight/models/water_bill_model.dart';
 import 'package:swiperight/utils/tab_view_home.dart';
 import 'package:swiperight/views/create_new_password.dart';
 import 'package:swiperight/views/login_screen.dart';
@@ -705,14 +707,14 @@ class UserController extends ChangeNotifier {
   final elecBillFormKey = GlobalKey<FormState>();
 
   Future<void> storeElectricityBill(
-    int consumerNumber,
-    String customerName,
-    int billAmount,
-    String billDate,
-    String dueDate,
-    String reminderDate,
-    String electricityBoard,
-  ) async {
+      int consumerNumber,
+      String customerName,
+      int billAmount,
+      String billDate,
+      String dueDate,
+      String reminderDate,
+      String electricityBoard,
+      bool billStatus) async {
     try {
       _electricityBillModel = ElectricityBillModel(
           consumerNumber: consumerNumber,
@@ -721,7 +723,8 @@ class UserController extends ChangeNotifier {
           billDate: billDate,
           dueDate: dueDate,
           reminderDate: reminderDate,
-          electricityBoard: electricityBoard);
+          electricityBoard: electricityBoard,
+          billStatus: billStatus);
 
       final data = firebaseFirestore
           .collection('users')
@@ -744,7 +747,7 @@ class UserController extends ChangeNotifier {
           .doc(firebaseAuth.currentUser!.uid)
           .collection('electricityBill');
       QuerySnapshot elecBillSnapshot = await elecBillRef
-          .where('electricytBoard', isEqualTo: electricityBoard)
+          .where('electricityBoard', isEqualTo: electricityBoard)
           .get();
 
       for (var doc in elecBillSnapshot.docs) {
@@ -756,6 +759,7 @@ class UserController extends ChangeNotifier {
         String dueDate = doc['dueDate'];
         String reminderDate = doc['reminderDate'];
         String electricityBoard = doc['electricityBoard'];
+        bool billStatus = doc['billStatus'];
 
         elecBills = ElectricityBillModel(
             billid: billid,
@@ -765,11 +769,29 @@ class UserController extends ChangeNotifier {
             billDate: billDate,
             dueDate: dueDate,
             reminderDate: reminderDate,
-            electricityBoard: electricityBoard);
+            electricityBoard: electricityBoard,
+            billStatus: billStatus);
         elecBillsList.add(elecBills!);
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future updateBillStatus(
+    String collectionName,
+    String billid,
+    bool newValue,
+  ) async {
+    try {
+      DocumentReference docRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection(collectionName)
+          .doc(billid);
+      await docRef.update({'billStatus': newValue});
+    } catch (e) {
+      print('update failed : $e');
     }
   }
 
@@ -787,6 +809,171 @@ class UserController extends ChangeNotifier {
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
       controller.text = DateFormat('dd-MM-yyyy').format(picked);
+    }
+  }
+
+  //-----------------------ADD&FETCH WATER BILLS--------------------------------
+
+  WaterBillModel? _waterBillModel;
+  WaterBillModel get waterBillModel => _waterBillModel!;
+  TextEditingController waterConnectionidController = TextEditingController();
+  TextEditingController waterCustomerNameController = TextEditingController();
+  TextEditingController waterBillAmountController = TextEditingController();
+  TextEditingController waterBillDateController = TextEditingController();
+  TextEditingController waterDueDateController = TextEditingController();
+  TextEditingController waterRemiderDateController = TextEditingController();
+  final waterBillKey = GlobalKey<FormState>();
+
+  Future<void> storeWaterBill(
+      int connectionid,
+      String customerName,
+      int billAmount,
+      String billDate,
+      String dueDate,
+      String reminderDate,
+      String authority,
+      bool billStatus) async {
+    try {
+      _waterBillModel = WaterBillModel(
+          connectionid: connectionid,
+          customerName: customerName,
+          billAmount: billAmount,
+          billDate: billDate,
+          dueDate: dueDate,
+          reminderDate: reminderDate,
+          authority: authority,
+          billStatus: billStatus);
+
+      final data = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid);
+      final docs = data.collection('waterBill').doc();
+      docs.set(_waterBillModel!.toMap(docs.id));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<WaterBillModel> waterBillsList = [];
+  WaterBillModel? waterBills;
+
+  Future fetchWaterBills(authority) async {
+    try {
+      waterBillsList.clear();
+      CollectionReference waterBillRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('waterBill');
+      QuerySnapshot waterBillSnapshot =
+          await waterBillRef.where('authority', isEqualTo: authority).get();
+
+      for (var doc in waterBillSnapshot.docs) {
+        String billid = doc['billid'];
+        int connectionid = doc['connectionid'];
+        String customerName = doc['customerName'];
+        int billAmount = doc['billAmount'];
+        String billDate = doc['billDate'];
+        String dueDate = doc['dueDate'];
+        String reminderDate = doc['reminderDate'];
+        String authority = doc['authority'];
+        bool billStatus = doc['billStatus'];
+
+        waterBills = WaterBillModel(
+            billid: billid,
+            connectionid: connectionid,
+            customerName: customerName,
+            billAmount: billAmount,
+            billDate: billDate,
+            dueDate: dueDate,
+            reminderDate: reminderDate,
+            authority: authority,
+            billStatus: billStatus);
+        waterBillsList.add(waterBills!);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+  //-----------------------ADD&FETCH LOANS--------------------------------------
+
+  LoanModel? _loanModel;
+  LoanModel get loanModel => _loanModel!;
+  TextEditingController loanAccountNumberController = TextEditingController();
+  TextEditingController loanCustomerNameController = TextEditingController();
+  TextEditingController loanAmountController = TextEditingController();
+  TextEditingController loanreminderDateController = TextEditingController();
+  TextEditingController loanDueDateController = TextEditingController();
+  TextEditingController loanMobileNumberController = TextEditingController();
+  final loanAddKey = GlobalKey<FormState>();
+
+  Future<void> storeLoan(
+      int loanAccountNumber,
+      String customerName,
+      int loanAmount,
+      int mobileNumber,
+      String dueDate,
+      String reminderDate,
+      String bank,
+      bool loanStatus) async {
+    try {
+      _loanModel = LoanModel(
+          loanAccountNumber: loanAccountNumber,
+          customerName: customerName,
+          loanAmount: loanAmount,
+          mobileNumber: mobileNumber,
+          dueDate: dueDate,
+          reminderDate: reminderDate,
+          bank: bank,
+          loanStatus: loanStatus);
+
+      final data = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid);
+      final docs = data.collection('loans').doc();
+      docs.set(_loanModel!.toMap(docs.id));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<LoanModel> loanList = [];
+  LoanModel? loans;
+
+  Future fetchLoan(bank) async {
+    try {
+      loanList.clear();
+      CollectionReference loanRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('loans');
+      QuerySnapshot loanSnapshot =
+          await loanRef.where('bank', isEqualTo: bank).get();
+
+      for (var doc in loanSnapshot.docs) {
+        String loanid = doc['loanid'];
+        int loanAccountNumber = doc['loanAccountNumber'];
+        String customerName = doc['customerName'];
+        int loanAmount = doc['loanAmount'];
+        int mobileNumber = doc['mobileNumber'];
+        String dueDate = doc['dueDate'];
+        String reminderDate = doc['reminderDate'];
+        String bank = doc['bank'];
+        bool loanStatus = doc['loanStatus'];
+
+        loans = LoanModel(
+            loanid: loanid,
+            loanAccountNumber: loanAccountNumber,
+            customerName: customerName,
+            loanAmount: loanAmount,
+            mobileNumber: mobileNumber,
+            dueDate: dueDate,
+            reminderDate: reminderDate,
+            bank: bank,
+            loanStatus: loanStatus);
+        loanList.add(loans!);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

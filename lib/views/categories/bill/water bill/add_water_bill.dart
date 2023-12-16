@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
+import 'package:swiperight/controller/user_controller.dart';
 import 'package:swiperight/views/categories/bill/water%20bill/water_bill_list.dart';
 
 class AddWaterBill extends StatelessWidget {
@@ -13,6 +15,7 @@ class AddWaterBill extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     String header = 'Kerala Water Authority';
     String logo = 'assets/images/water_authority.png';
+    final waterBillAddPro = Provider.of<UserController>(context);
     return Scaffold(
       backgroundColor: defaultBgColor,
       body: SafeArea(
@@ -84,8 +87,9 @@ class AddWaterBill extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Expanded(
-                            child: SingleChildScrollView(
+                          child: SingleChildScrollView(
+                            child: Form(
+                              key: waterBillAddPro.waterBillKey,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -104,6 +108,8 @@ class AddWaterBill extends StatelessWidget {
                                     height: 10,
                                   ),
                                   TextFormField(
+                                    controller: waterBillAddPro
+                                        .waterConnectionidController,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -131,6 +137,8 @@ class AddWaterBill extends StatelessWidget {
                                     height: 20,
                                   ),
                                   TextFormField(
+                                    controller: waterBillAddPro
+                                        .waterCustomerNameController,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return '*this field is required';
@@ -157,6 +165,8 @@ class AddWaterBill extends StatelessWidget {
                                     height: 20,
                                   ),
                                   TextFormField(
+                                    controller: waterBillAddPro
+                                        .waterBillAmountController,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -184,6 +194,13 @@ class AddWaterBill extends StatelessWidget {
                                     height: 20,
                                   ),
                                   TextFormField(
+                                    onTap: () => waterBillAddPro.selectDate(
+                                        context,
+                                        waterBillAddPro.selectedFormattedDate,
+                                        waterBillAddPro
+                                            .waterBillDateController),
+                                    controller:
+                                        waterBillAddPro.waterBillDateController,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -211,6 +228,12 @@ class AddWaterBill extends StatelessWidget {
                                     height: 20,
                                   ),
                                   TextFormField(
+                                    onTap: () => waterBillAddPro.selectDate(
+                                        context,
+                                        waterBillAddPro.selectedFormattedDate,
+                                        waterBillAddPro.waterDueDateController),
+                                    controller:
+                                        waterBillAddPro.waterDueDateController,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -238,6 +261,13 @@ class AddWaterBill extends StatelessWidget {
                                     height: 20,
                                   ),
                                   TextFormField(
+                                    onTap: () => waterBillAddPro.selectDate(
+                                        context,
+                                        waterBillAddPro.selectedFormattedDate,
+                                        waterBillAddPro
+                                            .waterRemiderDateController),
+                                    controller: waterBillAddPro
+                                        .waterRemiderDateController,
                                     keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -275,14 +305,38 @@ class AddWaterBill extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => WaterBillsList(
-                                header: header,
-                                logos: logo,
-                              ),
-                            ),
-                          );
+                          if (waterBillAddPro.waterBillKey.currentState!
+                              .validate()) {
+                            waterBillAddPro
+                                .storeWaterBill(
+                                    int.parse(waterBillAddPro
+                                        .waterConnectionidController.text),
+                                    waterBillAddPro
+                                        .waterCustomerNameController.text,
+                                    int.parse(waterBillAddPro
+                                        .waterBillAmountController.text),
+                                    waterBillAddPro
+                                        .waterBillDateController.text,
+                                    waterBillAddPro.waterDueDateController.text,
+                                    waterBillAddPro
+                                        .waterRemiderDateController.text,
+                                    header,
+                                    false)
+                                .then(
+                                  (value) =>
+                                      Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const WaterBillsList(),
+                                    ),
+                                  ),
+                                );
+                          }
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => WaterBillsList(),
+                          //   ),
+                          // );
                         },
                         child: Container(
                           width: width,

@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/payment_mode.dart';
+import 'package:swiperight/views/categories/bill/water%20bill/water_payment_mode.dart';
 
 class PayWaterBill extends StatelessWidget {
   final String header;
   final String logos;
+  final String billid;
   final int connectionID;
+  final int billAmount;
+  final String customerName;
+  final String billDate;
+  final String billDueDate;
+  final bool billStatus;
+
   const PayWaterBill({
     required this.header,
     required this.logos,
     required this.connectionID,
     super.key,
+    required this.billid,
+    required this.billAmount,
+    required this.customerName,
+    required this.billDate,
+    required this.billDueDate,
+    required this.billStatus,
   });
 
   @override
@@ -72,9 +86,9 @@ class PayWaterBill extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Pending',
-                              style: TextStyle(
+                            Text(
+                              billStatus == true ? 'Paid' : 'Pending',
+                              style: const TextStyle(
                                   color: Colors.white, fontFamily: 'SofiaPro'),
                             ),
                             const SizedBox(
@@ -100,7 +114,7 @@ class PayWaterBill extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      'Connection ID',
+                                      'Consumer Number',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'Poppins'),
@@ -118,17 +132,17 @@ class PayWaterBill extends StatelessWidget {
                             const SizedBox(
                               height: 30,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Customer Name : ',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Poppins'),
                                 ),
                                 Text(
-                                  'Name ',
-                                  style: TextStyle(
+                                  customerName,
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'SofiaPro'),
                                 ),
@@ -137,9 +151,9 @@ class PayWaterBill extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Amount : ',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -147,8 +161,8 @@ class PayWaterBill extends StatelessWidget {
                                       fontFamily: 'SofiaPro'),
                                 ),
                                 Text(
-                                  '₹ 455/-',
-                                  style: TextStyle(
+                                  '₹ $billAmount/-',
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
                                       fontFamily: 'Poppins'),
@@ -158,9 +172,9 @@ class PayWaterBill extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Bill Date : ',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -168,8 +182,8 @@ class PayWaterBill extends StatelessWidget {
                                       fontFamily: 'SofiaPro'),
                                 ),
                                 Text(
-                                  '00/00/0000',
-                                  style: TextStyle(
+                                  billDate,
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
                                       fontFamily: 'SofiaPro'),
@@ -179,9 +193,9 @@ class PayWaterBill extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Due Date : ',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -189,8 +203,8 @@ class PayWaterBill extends StatelessWidget {
                                       fontFamily: 'SofiaPro'),
                                 ),
                                 Text(
-                                  '00/00/0000',
-                                  style: TextStyle(
+                                  billDueDate,
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
                                       fontFamily: 'SofiaPro'),
@@ -220,16 +234,24 @@ class PayWaterBill extends StatelessWidget {
                                                 MaterialStatePropertyAll(
                                                     defaultBgColor)),
                                         onPressed: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) =>
-                                                const PaymentModes(
-                                                    paymentAmount: 500),
-                                          ));
+                                          billStatus
+                                              ? null
+                                              : Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WaterPaymentModes(
+                                                      paymentAmount: billAmount,
+                                                      billid: billid,
+                                                      billStatus: billStatus,
+                                                    ),
+                                                  ),
+                                                );
                                         },
-                                        child: const Text(
-                                          'PAY BILL',
-                                          style: TextStyle(
+                                        child: Text(
+                                          billStatus == true
+                                              ? 'ALREADY PAID'
+                                              : 'PAY BILL',
+                                          style: const TextStyle(
                                               fontSize: 15,
                                               color: Colors.white,
                                               fontFamily: 'Poppins'),

@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/payment_mode.dart';
+import 'package:swiperight/views/categories/bill/loan/loan_payment_modes.dart';
+import 'package:swiperight/views/categories/bill/water%20bill/water_payment_mode.dart';
 
 class PayLoan extends StatelessWidget {
   final String header;
   final String logos;
+  final String loanid;
+  final int loanAccountNumber;
+  final String customerName;
+  final int loanAmount;
+  final int mobileNumber;
+  final bool loanStatus;
   const PayLoan({
     required this.header,
     required this.logos,
     super.key,
+    required this.loanid,
+    required this.loanAccountNumber,
+    required this.customerName,
+    required this.loanAmount,
+    required this.mobileNumber,
+    required this.loanStatus,
   });
 
   @override
@@ -88,19 +102,19 @@ class PayLoan extends StatelessWidget {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                const Column(
+                                Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'LOAN ACCOUNT NUMBER',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'Poppins'),
                                     ),
                                     Text(
-                                      '1168157004033',
-                                      style: TextStyle(
+                                      loanAccountNumber.toString(),
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'SofiaPro'),
                                     ),
@@ -111,17 +125,17 @@ class PayLoan extends StatelessWidget {
                             const SizedBox(
                               height: 30,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Customer Name : ',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Poppins'),
                                 ),
                                 Text(
-                                  'Name ',
-                                  style: TextStyle(
+                                  customerName,
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'SofiaPro'),
                                 ),
@@ -130,9 +144,9 @@ class PayLoan extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Amount : ',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -140,8 +154,8 @@ class PayLoan extends StatelessWidget {
                                       fontFamily: 'SofiaPro'),
                                 ),
                                 Text(
-                                  '₹ 3846/-',
-                                  style: TextStyle(
+                                  '₹ $loanAmount',
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
                                       fontFamily: 'Poppins'),
@@ -151,9 +165,9 @@ class PayLoan extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Loan Account Number : ',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -161,8 +175,8 @@ class PayLoan extends StatelessWidget {
                                       fontFamily: 'SofiaPro'),
                                 ),
                                 Text(
-                                  '1168157004033',
-                                  style: TextStyle(
+                                  loanAccountNumber.toString(),
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
                                       fontFamily: 'SofiaPro'),
@@ -172,9 +186,9 @@ class PayLoan extends StatelessWidget {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Row(
+                            Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Mobile Number : ',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -182,8 +196,8 @@ class PayLoan extends StatelessWidget {
                                       fontFamily: 'SofiaPro'),
                                 ),
                                 Text(
-                                  '9876543210',
-                                  style: TextStyle(
+                                  mobileNumber.toString(),
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
                                       fontFamily: 'SofiaPro'),
@@ -213,16 +227,24 @@ class PayLoan extends StatelessWidget {
                                                 MaterialStatePropertyAll(
                                                     defaultBgColor)),
                                         onPressed: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) =>
-                                                const PaymentModes(
-                                                    paymentAmount: 1200),
-                                          ));
+                                          loanStatus
+                                              ? null
+                                              : Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoanPaymentModes(
+                                                      loanAmount: loanAmount,
+                                                      loanid: loanid,
+                                                      loanStatus: loanStatus,
+                                                    ),
+                                                  ),
+                                                );
                                         },
-                                        child: const Text(
-                                          'PAY LOAN',
-                                          style: TextStyle(
+                                        child: Text(
+                                          loanStatus == true
+                                              ? 'ALREADY PAID'
+                                              : 'PAY BILL',
+                                          style: const TextStyle(
                                               fontSize: 15,
                                               color: Colors.white,
                                               fontFamily: 'Poppins'),

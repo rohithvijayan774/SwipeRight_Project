@@ -1,36 +1,36 @@
-class ElectricityBillModel {
+class WaterBillModel {
   String? billid;
-  int consumerNumber;
+  int connectionid;
   String customerName;
   int billAmount;
   String billDate;
   String dueDate;
   String reminderDate;
-  String electricityBoard;
+  String authority;
   bool billStatus;
 
-  ElectricityBillModel({
+  WaterBillModel({
     this.billid,
-    required this.consumerNumber,
+    required this.connectionid,
     required this.customerName,
     required this.billAmount,
     required this.billDate,
     required this.dueDate,
     required this.reminderDate,
-    required this.electricityBoard,
+    required this.authority,
     required this.billStatus,
   });
 
-  factory ElectricityBillModel.fromMap(Map<String, dynamic> map) {
-    return ElectricityBillModel(
+  factory WaterBillModel.fromMap(Map<String, dynamic> map) {
+    return WaterBillModel(
       billid: map['billid'],
-      consumerNumber: map['consumerNumber'],
+      connectionid: map['connectionid'],
       customerName: map['customerName'],
       billAmount: map['billAmount'],
       billDate: map['billDate'],
       dueDate: map['dueDate'],
       reminderDate: map['reminderDate'],
-      electricityBoard: map['electricityBoard'],
+      authority: map['authority'],
       billStatus: map['billStatus'],
     );
   }
@@ -38,13 +38,13 @@ class ElectricityBillModel {
   Map<String, dynamic> toMap(id) {
     return {
       'billid': id,
-      'consumerNumber': consumerNumber,
+      'connectionid': connectionid,
       'customerName': customerName,
       'billAmount': billAmount,
       'billDate': billDate,
       'dueDate': dueDate,
       'reminderDate': reminderDate,
-      'electricityBoard': electricityBoard,
+      'authority': authority,
       'billStatus': billStatus,
     };
   }

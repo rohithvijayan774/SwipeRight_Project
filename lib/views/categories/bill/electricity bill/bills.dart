@@ -3,6 +3,7 @@ import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/add_electricity_bill.dart';
 import 'package:swiperight/views/categories/bill/loan/select_bank.dart';
 import 'package:swiperight/views/categories/bill/water%20bill/add_water_bill.dart';
+import 'package:swiperight/views/categories/bill/water%20bill/water_bill_list.dart';
 import 'package:swiperight/widgets/bills_custom_tile.dart';
 
 class Bills extends StatelessWidget {
@@ -68,7 +69,7 @@ class Bills extends StatelessWidget {
                           icon: Icons.water_damage_outlined,
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const AddWaterBill(),
+                              builder: (context) => const WaterBillsList(),
                             ));
                           }),
                       BillsCustomTile(

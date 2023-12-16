@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/bill/loan/add_loan_amount.dart';
+import 'package:swiperight/views/categories/bill/loan/loans_list.dart';
 
 class SelectBank extends StatelessWidget {
   const SelectBank({super.key});
@@ -108,12 +109,9 @@ class SelectBank extends StatelessWidget {
                                       onTap: () {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AddLoanAmount(
-                                                      header: banks[index]
-                                                          ['bank'],
-                                                      logos: banks[index]
-                                                          ['logo'])),
+                                              builder: (context) => LoansList(
+                                                  header: banks[index]['bank'],
+                                                  logos: banks[index]['logo'])),
                                         );
                                       },
                                     );

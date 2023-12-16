@@ -63,7 +63,7 @@ class UserDetails extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        padding:const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         width: width,
                         decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -187,10 +187,13 @@ class UserDetails extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                const PaymentModes(paymentAmount: 250),
-                          ));
+                          // Navigator.of(context).push(MaterialPageRoute(
+                          //   builder: (context) =>
+                          //       const PaymentModes(paymentAmount: 250),
+                          // ));
+                          // 5559426540147650
+                          //12/28
+                          //210
                         },
                         child: Container(
                           width: width,

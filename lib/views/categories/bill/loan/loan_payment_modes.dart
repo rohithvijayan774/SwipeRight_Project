@@ -4,22 +4,22 @@ import 'package:swiperight/const.dart';
 import 'package:swiperight/controller/user_controller.dart';
 import 'package:swiperight/utils/tab_view_home.dart';
 
-class PaymentModes extends StatefulWidget {
-  final int paymentAmount;
-  final String billid;
-  final bool billStatus;
-  const PaymentModes({
-    required this.paymentAmount,
+class LoanPaymentModes extends StatefulWidget {
+  final int loanAmount;
+  final String loanid;
+  final bool loanStatus;
+  const LoanPaymentModes({
+    required this.loanAmount,
     super.key,
-    required this.billid,
-    required this.billStatus,
+    required this.loanid,
+    required this.loanStatus,
   });
 
   @override
-  State<PaymentModes> createState() => _PaymentModesState();
+  State<LoanPaymentModes> createState() => LoanPaymentModesState();
 }
 
-class _PaymentModesState extends State<PaymentModes> {
+class LoanPaymentModesState extends State<LoanPaymentModes> {
   String selectedMode = 'GooglePay';
 
   @override
@@ -223,7 +223,7 @@ class _PaymentModesState extends State<PaymentModes> {
                         onTap: () {
                           print(selectedMode);
                           paymentController.updateBillStatus(
-                              'electricityBill', widget.billid, true);
+                              'loans', widget.loanid, true);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                 builder: (context) => const TabViewHome(),
