@@ -2,12 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swiperight/models/dth_recharge_model.dart';
 import 'package:swiperight/models/electricity_bill_model.dart';
 import 'package:swiperight/models/food_grocery_model.dart';
+import 'package:swiperight/models/insurance_model.dart';
 import 'package:swiperight/models/loan_model.dart';
 import 'package:swiperight/models/medcine_model.dart';
+import 'package:swiperight/models/mobile_recharge_model.dart';
 import 'package:swiperight/models/user_model.dart';
 import 'package:swiperight/models/water_bill_model.dart';
 import 'package:swiperight/utils/tab_view_home.dart';
@@ -165,9 +169,91 @@ class UserController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future googleLogin(context) async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        return null;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      print("Google Credentials : $credential");
+      print('name : ${googleUser.displayName}');
+      print('name : ${googleUser.email}');
+      print('name : ${googleUser.id}');
+      print('name : ${googleUser.photoUrl}');
+      return await firebaseAuth
+          .signInWithCredential(credential)
+          .then((value) => saveUser(firebaseAuth.currentUser!.uid,
+              googleUser.displayName!, googleUser.email))
+          .then((value) => Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const TabViewHome(),
+              ),
+              (route) => false));
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void clearLoginFields() {
     loginEmailController.clear();
     loginpasswordController.clear();
+    notifyListeners();
+  }
+
+  void signOut(BuildContext ctx) {
+    showDialog(
+      context: ctx,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          // content: Text("Do you want to SignOut?"),
+          title: const Text(
+            'Do you want to SignOut?',
+            style:
+                TextStyle(fontFamily: 'SofiaPro', fontWeight: FontWeight.w600),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(fontSize: 17, fontFamily: "SofiaPro"),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                await GoogleSignIn().signOut();
+                setSignOut();
+                // _isSignedIn = false;
+                // await clearLocalData();
+
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (ctx1) => const WelcomePage(),
+                    ),
+                    (route) => false);
+              },
+              child: const Text(
+                'SignOut',
+                style: TextStyle(
+                    fontSize: 17, color: Colors.red, fontFamily: "SofiaPro"),
+              ),
+            ),
+          ],
+        );
+      },
+    );
     notifyListeners();
   }
 
@@ -199,6 +285,7 @@ class UserController extends ChangeNotifier {
   bool get isSignedIn => _isSignedIn;
 
   void checkSignedIn() async {
+    print('Checking Signin : $_isSignedIn');
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     _isSignedIn = sharedPreferences.getBool('is_signedIn') ?? false;
@@ -206,10 +293,13 @@ class UserController extends ChangeNotifier {
   }
 
   Future setSignIn() async {
+    print('******calling setSigned in');
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     sharedPreferences.setBool('is_signedIn', true);
     _isSignedIn = true;
+
+    print("Is Signed in Home : $_isSignedIn");
 
     notifyListeners();
   }
@@ -282,20 +372,20 @@ class UserController extends ChangeNotifier {
   //------------------SPLASH SCREEN---------------------------------------------
 
   gotoNext(context) async {
+    print("isSignedin :  $isSignedIn");
     if (isSignedIn == true) {
-      await Future.delayed(const Duration(seconds: 5)).then(
-        (value) => Navigator.of(context).push(
+      Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const TabViewHome(),
           ),
-        ),
-      );
+          (route) => false);
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const WelcomePage(),
-        ),
-      );
+      await Future.delayed(const Duration(seconds: 3));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const WelcomePage(),
+          ),
+          (route) => false);
     }
     // notifyListeners();
   }
@@ -971,6 +1061,343 @@ class UserController extends ChangeNotifier {
             bank: bank,
             loanStatus: loanStatus);
         loanList.add(loans!);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future updateLoanStatus(
+    String collectionName,
+    String billid,
+    bool newValue,
+  ) async {
+    try {
+      DocumentReference docRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection(collectionName)
+          .doc(billid);
+      await docRef.update({'loanStatus': newValue});
+    } catch (e) {
+      print('update failed : $e');
+    }
+  }
+
+  //-------------------ADD & FETCH RECHARGE-------------------------------------
+  MobileRechargeModel? _mobRechargeModel;
+  MobileRechargeModel get mobRechargeModel => _mobRechargeModel!;
+  final rechargeUserKey = GlobalKey<FormState>();
+  TextEditingController operatorController = TextEditingController();
+  TextEditingController rechargeDateController = TextEditingController();
+  TextEditingController rechargeExpiryDateController = TextEditingController();
+  TextEditingController rechargeReminderDateController =
+      TextEditingController();
+  TextEditingController rechargeCustomerNameController =
+      TextEditingController();
+  TextEditingController rechargeCustomerNumberController =
+      TextEditingController();
+
+  Future<void> storeMobRecharge(
+    String operator,
+    String rechargeDate,
+    String rechargeExpiryDate,
+    String rechargeReminderDate,
+    String rechargeCustomerName,
+    int rechargeCustomerNumber,
+  ) async {
+    try {
+      _mobRechargeModel = MobileRechargeModel(
+          mobOperator: operator,
+          mobRechargeDate: rechargeDate,
+          mobRechargeExpiryDate: rechargeExpiryDate,
+          mobRechargeReminderDate: rechargeReminderDate,
+          mobCustomerName: rechargeCustomerName,
+          mobCustomerNumber: rechargeCustomerNumber);
+      final data = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid);
+      final docs = data.collection('mobileRecharge').doc();
+      docs.set(_mobRechargeModel!.toMap(docs.id));
+    } catch (e) {
+      print('Mob Recharge Added Failed : $e');
+    }
+  }
+
+  List<MobileRechargeModel> mobRechargeList = [];
+  MobileRechargeModel? mobRecharges;
+
+  Future fetchMobRecharges() async {
+    try {
+      mobRechargeList.clear();
+      CollectionReference mobRechargeRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('mobileRecharge');
+
+      QuerySnapshot mobRechargeSnapshot = await mobRechargeRef.get();
+      for (var doc in mobRechargeSnapshot.docs) {
+        String rechargeid = doc['mobRechargeid'];
+        String operator = doc['mobOperator'];
+        String rechargeDate = doc['mobRechargeDate'];
+        String rechargeExpiryDate = doc['mobRechargeExpiryDate'];
+        String rechargeReminderDate = doc['mobRechargeReminderDate'];
+        String rechargeCustomerName = doc['mobCustomerName'];
+        int rechargeCustomerNumber = doc['mobCustomerNumber'];
+
+        mobRecharges = MobileRechargeModel(
+            mobRechargeid: rechargeid,
+            mobOperator: operator,
+            mobRechargeDate: rechargeDate,
+            mobRechargeExpiryDate: rechargeExpiryDate,
+            mobRechargeReminderDate: rechargeReminderDate,
+            mobCustomerName: rechargeCustomerName,
+            mobCustomerNumber: rechargeCustomerNumber);
+        mobRechargeList.add(mobRecharges!);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //ADD & FETCH NEW OPERATOR
+  AddOperator? _addOperator;
+  AddOperator get addOperator => _addOperator!;
+
+  TextEditingController addNewOperatorController = TextEditingController();
+  Future<void> addNewOperator(
+    String newOperator,
+  ) async {
+    try {
+      _addOperator = AddOperator(operatorName: newOperator);
+      await firebaseFirestore
+          .collection('mobileOperators')
+          .doc(newOperator)
+          .set(_addOperator!.toMap());
+    } catch (e) {
+      print('Adding new operator failed : $e');
+    }
+  }
+
+  List<AddOperator> operatorsList = [];
+  AddOperator? newOperator;
+
+  Future<void> fetchOperators() async {
+    try {
+      operatorsList.clear();
+      CollectionReference operatorsRef =
+          firebaseFirestore.collection('mobileOperators');
+      QuerySnapshot operatorsSnapshot = await operatorsRef.get();
+
+      for (var doc in operatorsSnapshot.docs) {
+        String operatorName = doc['operatorName'];
+
+        newOperator = AddOperator(operatorName: operatorName);
+        operatorsList.add(newOperator!);
+      }
+    } catch (e) {
+      print('Operator fetch failed : $e');
+    }
+  }
+
+  //-------------------ADD & FETCH DTH RECHARGE-------------------------------------
+  DTHRechargeModel? _dthRechargeModel;
+  DTHRechargeModel get dthRechargeModel => _dthRechargeModel!;
+
+  final dthRechargeUserKey = GlobalKey<FormState>();
+  TextEditingController dthOperatorController = TextEditingController();
+  TextEditingController dthRechargeDateController = TextEditingController();
+  TextEditingController dthRechargeExpiryDateController =
+      TextEditingController();
+  TextEditingController dthRechargeReminderDateController =
+      TextEditingController();
+  TextEditingController dthRechargeCustomerNameController =
+      TextEditingController();
+  TextEditingController dthRechargeAmountController = TextEditingController();
+  TextEditingController dthSubscriberIDController = TextEditingController();
+  final dthSubscriberIDKey = GlobalKey<FormState>();
+
+  Future<void> storeDTHRecharge(
+    String operator,
+    String rechargeDate,
+    String rechargeExpiryDate,
+    String rechargeReminderDate,
+    String rechargeCustomerName,
+    int rechargeAmount,
+  ) async {
+    try {
+      _dthRechargeModel = DTHRechargeModel(
+          dthOperator: operator,
+          dthRechargeDate: rechargeDate,
+          dthRechargeExpiryDate: rechargeExpiryDate,
+          dthRechargeReminderDate: rechargeReminderDate,
+          dthCustomerName: rechargeCustomerName,
+          dthBillAmount: rechargeAmount);
+      final data = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid);
+      final docs = data.collection('dthRecharge').doc();
+      docs.set(_dthRechargeModel!.toMap(docs.id));
+    } catch (e) {
+      print('Mob Recharge Added Failed : $e');
+    }
+  }
+
+  List<DTHRechargeModel> dthRechargeList = [];
+  DTHRechargeModel? dthRecharges;
+
+  Future fetchDTHRecharges() async {
+    try {
+      dthRechargeList.clear();
+      CollectionReference dthRechargeRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('dthRecharge');
+
+      QuerySnapshot dthRechargeSnapshot = await dthRechargeRef.get();
+      for (var doc in dthRechargeSnapshot.docs) {
+        String rechargeid = doc['dthRechargeid'];
+        String operator = doc['dthOperator'];
+        String rechargeDate = doc['dthRechargeDate'];
+        String rechargeExpiryDate = doc['dthRechargeExpiryDate'];
+        String rechargeReminderDate = doc['dthRechargeReminderDate'];
+        String rechargeCustomerName = doc['dthCustomerName'];
+        int rechargeCustomerNumber = doc['dthBillAmount'];
+
+        dthRecharges = DTHRechargeModel(
+            dthRechargeid: rechargeid,
+            dthOperator: operator,
+            dthRechargeDate: rechargeDate,
+            dthRechargeExpiryDate: rechargeExpiryDate,
+            dthRechargeReminderDate: rechargeReminderDate,
+            dthCustomerName: rechargeCustomerName,
+            dthBillAmount: rechargeCustomerNumber);
+        dthRechargeList.add(dthRecharges!);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //ADD & FETCH NEW OPERATOR
+  AddDTHOperator? _addDTHOperator;
+  AddDTHOperator get addDTHOperator => _addDTHOperator!;
+
+  TextEditingController addNewDTHOperatorController = TextEditingController();
+  Future<void> addNewDTHOperator(
+    String newOperator,
+  ) async {
+    try {
+      _addDTHOperator = AddDTHOperator(operatorName: newOperator);
+      await firebaseFirestore
+          .collection('dthOperators')
+          .doc(newOperator)
+          .set(_addDTHOperator!.toMap());
+    } catch (e) {
+      print('Adding new operator failed : $e');
+    }
+  }
+
+  List<AddDTHOperator> dthOperatorsList = [];
+  AddDTHOperator? newDTHOperator;
+
+  Future<void> fetchDTHOperators() async {
+    try {
+      dthOperatorsList.clear();
+      CollectionReference dthoperatorsRef =
+          firebaseFirestore.collection('dthOperators');
+      QuerySnapshot dthoperatorsSnapshot = await dthoperatorsRef.get();
+
+      for (var doc in dthoperatorsSnapshot.docs) {
+        String operatorName = doc['operatorName'];
+
+        newDTHOperator = AddDTHOperator(operatorName: operatorName);
+        dthOperatorsList.add(newDTHOperator!);
+      }
+    } catch (e) {
+      print('Operator fetch failed : $e');
+    }
+  }
+
+  //--------------------------------ADD & FETCH INSURANCE-----------------------
+
+  InsuranceModel? _insuranceModel;
+  InsuranceModel get insuranceModel => _insuranceModel!;
+  final insuranceAddKey = GlobalKey<FormState>();
+
+  TextEditingController insuranceTypeController = TextEditingController();
+  TextEditingController insuranceDateController = TextEditingController();
+  TextEditingController insuranceDateExpiryController = TextEditingController();
+  TextEditingController insuranceDateReminderController =
+      TextEditingController();
+  TextEditingController insuranceCustomerNameController =
+      TextEditingController();
+  TextEditingController insuranceCustomerNumberController =
+      TextEditingController();
+
+  final insurancePayKey = GlobalKey<FormState>();
+  TextEditingController insuranceCompanyNameController =
+      TextEditingController();
+  TextEditingController insurancePolicyNumberController =
+      TextEditingController();
+
+  Future<void> storeInsurance(
+    String insuranceType,
+    String insuranceDate,
+    String insuranceExpiryDate,
+    String insuranceReminderDate,
+    String insuranceCustomerName,
+    int insuranceCustomerNumber,
+  ) async {
+    try {
+      _insuranceModel = InsuranceModel(
+          insuranceType: insuranceType,
+          insuranceDate: insuranceDate,
+          insuranceExpiryDate: insuranceExpiryDate,
+          insuranceReminderDate: insuranceReminderDate,
+          insuranceCustomerName: insuranceCustomerName,
+          insuranceCustomerNumber: insuranceCustomerNumber);
+
+      final data = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid);
+      final docs = data.collection('insurance').doc();
+      docs.set(_insuranceModel!.toMap(docs.id));
+    } catch (e) {
+      print('Styore Insure failed : $e');
+    }
+  }
+
+  List<InsuranceModel> insuranceList = [];
+  InsuranceModel? insure;
+
+  Future fetchInsurance() async {
+    try {
+      insuranceList.clear();
+      CollectionReference insureRef = firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('insurance');
+
+      QuerySnapshot insureSnapshot = await insureRef.get();
+      for (var doc in insureSnapshot.docs) {
+        String insuranceID = doc['insuranceID'];
+        String insuranceType = doc['insuranceType'];
+        String insuranceDate = doc['insuranceDate'];
+        String insuranceExpiryDate = doc['insuranceExpiryDate'];
+        String insuranceReminderDate = doc['insuranceReminderDate'];
+        String insuranceCustomerName = doc['insuranceCustomerName'];
+        int insuranceCustomerNumber = doc['insuranceCustomerNumber'];
+
+        insure = InsuranceModel(
+            insuranceID: insuranceID,
+            insuranceType: insuranceType,
+            insuranceDate: insuranceDate,
+            insuranceExpiryDate: insuranceExpiryDate,
+            insuranceReminderDate: insuranceReminderDate,
+            insuranceCustomerName: insuranceCustomerName,
+            insuranceCustomerNumber: insuranceCustomerNumber);
+        insuranceList.add(insure!);
       }
     } catch (e) {
       print(e);

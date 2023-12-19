@@ -26,7 +26,7 @@ class SplashScreen extends StatelessWidget {
                   const Text(
                     'SWIPERIGHT',
                     style: TextStyle(fontFamily: 'Poppins', fontSize: 30),
-                  )
+                  ),
                 ],
               ),
             );

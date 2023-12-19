@@ -36,6 +36,7 @@ dependencies:
   firebase_core: ^2.24.0
   flutter:
     sdk: flutter
+  google_sign_in:
   iconsax: ^0.0.8
   intl: ^0.18.1
   provider: ^6.1.1

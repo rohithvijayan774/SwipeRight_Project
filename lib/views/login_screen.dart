@@ -49,107 +49,159 @@ class LoginScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Consumer<UserController>(
-                  builder: (context, userLoginController, _) {
-                return Form(
-                  key: userLoginController.loginKey,
-                  child: ListView(
-                    children: [
-                      const Text(
-                        'Welcome back! Glad to see you. Again!',
-                        style: TextStyle(fontSize: 25, fontFamily: 'Poppins'),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        controller: userLoginController.loginEmailController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '*required field';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: 'Enter your email',
-                          hintStyle: TextStyle(fontFamily: 'SofiaPro'),
+                builder: (context, userLoginController, _) {
+                  return Form(
+                    key: userLoginController.loginKey,
+                    child: ListView(
+                      children: [
+                        const Text(
+                          'Welcome back! Glad to see you. Again!',
+                          style: TextStyle(fontSize: 25, fontFamily: 'Poppins'),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        controller: userLoginController.loginpasswordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '*required field';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: 'Enter your password',
-                          hintStyle: TextStyle(fontFamily: 'SofiaPro'),
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    const ForgotPasswordScreen(),
-                              ));
-                            },
-                            child: const Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                  fontFamily: 'SofiaPro', color: Colors.grey),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        height: 40,
-                        width: width,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: buttonColor1,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                            if (userLoginController.loginKey.currentState!
-                                .validate()) {
-                              userLoginController.userLogin(
-                                  userLoginController.loginEmailController.text,
-                                  userLoginController
-                                      .loginpasswordController.text,
-                                  context);
+                        TextFormField(
+                          controller: userLoginController.loginEmailController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return '*required field';
+                            } else {
+                              return null;
                             }
                           },
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                                color: Colors.white, fontFamily: 'SofiaPro'),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Enter your email',
+                            hintStyle: TextStyle(fontFamily: 'SofiaPro'),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          controller:
+                              userLoginController.loginpasswordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return '*required field';
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Enter your password',
+                            hintStyle: TextStyle(fontFamily: 'SofiaPro'),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPasswordScreen(),
+                                ));
+                              },
+                              child: const Text(
+                                'Forgot Password?',
+                                style: TextStyle(
+                                    fontFamily: 'SofiaPro', color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          height: 40,
+                          width: width,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: buttonColor1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (userLoginController.loginKey.currentState!
+                                  .validate()) {
+                                userLoginController.userLogin(
+                                    userLoginController
+                                        .loginEmailController.text,
+                                    userLoginController
+                                        .loginpasswordController.text,
+                                    context);
+                              }
+                            },
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(
+                                  color: Colors.white, fontFamily: 'SofiaPro'),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        const Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                endIndent: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Or Login with',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                indent: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                userLoginController.googleLogin(context);
+                              },
+                              child: Container(
+                                height: 50,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  border: Border.all(color: Colors.grey),
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/google_icon.png'),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           )
         ],

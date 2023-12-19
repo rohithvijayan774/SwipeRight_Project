@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swiperight/const.dart';
+import 'package:swiperight/controller/user_controller.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/payment_mode.dart';
+import 'package:swiperight/views/categories/recharge/recharge_payment_mode.dart';
 
 class DTHSubscriberID extends StatelessWidget {
   final String header;
@@ -13,6 +16,7 @@ class DTHSubscriberID extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final subscriberController = Provider.of<UserController>(context);
 
     return Scaffold(
       backgroundColor: defaultBgColor,
@@ -67,23 +71,37 @@ class DTHSubscriberID extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  hintText:
-                                      'Subscriber ID/ Regitered Mobile Numer',
-                                  hintStyle: TextStyle(fontFamily: 'SofiaPro'),
+                          child: Form(
+                            key: subscriberController.dthSubscriberIDKey,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '*this field is required';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: subscriberController
+                                      .dthSubscriberIDController,
+                                  decoration: const InputDecoration(
+                                    hintText:
+                                        'Subscriber ID/ Regitered Mobile Numer',
+                                    hintStyle:
+                                        TextStyle(fontFamily: 'SofiaPro'),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Press the menu buton on your $header and select My Account to get your suscriber ID',
-                                style: const TextStyle(fontFamily: 'SofiaPro'),
-                              )
-                            ],
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Press the menu buton on your $header and select My Account to get your suscriber ID',
+                                  style:
+                                      const TextStyle(fontFamily: 'SofiaPro'),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -94,10 +112,14 @@ class DTHSubscriberID extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: InkWell(
                           onTap: () {
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //   builder: (context) =>
-                            //       const PaymentModes(paymentAmount: 250),
-                            // ));
+                            if (subscriberController
+                                .dthSubscriberIDKey.currentState!
+                                .validate()) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const RechargePaymentMode(),
+                              ));
+                            }
                           },
                           child: Container(
                             width: width,

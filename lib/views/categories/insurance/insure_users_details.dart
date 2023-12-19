@@ -5,7 +5,7 @@ import 'package:swiperight/views/categories/insurance/pay_insure.dart';
 class InsureUserDetails extends StatelessWidget {
   final String userName;
   final String insureType;
-  final String rechargeDate;
+  final String insuranceDate;
   final String expiryDate;
   final String reminderDate;
   final int number;
@@ -13,7 +13,7 @@ class InsureUserDetails extends StatelessWidget {
       {super.key,
       required this.userName,
       required this.insureType,
-      required this.rechargeDate,
+      required this.insuranceDate,
       required this.expiryDate,
       required this.reminderDate,
       required this.number});
@@ -134,7 +134,7 @@ class InsureUserDetails extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              rechargeDate,
+                              insuranceDate,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'SofiaPro',

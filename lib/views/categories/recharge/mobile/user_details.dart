@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swiperight/const.dart';
 import 'package:swiperight/views/categories/bill/electricity%20bill/payment_mode.dart';
+import 'package:swiperight/views/categories/recharge/recharge_payment_mode.dart';
 
 class UserDetails extends StatelessWidget {
   final String userName;
@@ -187,10 +188,9 @@ class UserDetails extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          // Navigator.of(context).push(MaterialPageRoute(
-                          //   builder: (context) =>
-                          //       const PaymentModes(paymentAmount: 250),
-                          // ));
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const RechargePaymentMode(),
+                          ));
                           // 5559426540147650
                           //12/28
                           //210

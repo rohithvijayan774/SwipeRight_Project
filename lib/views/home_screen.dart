@@ -47,7 +47,6 @@ class HomeScreen extends StatelessWidget {
                                   backgroundColor: defaultPurpleColor,
                                   child: Icon(Icons.person),
                                 ),
-                                Text(userHomeController.userModel.userName),
                                 IconButton(
                                   onPressed: () {
                                     Navigator.of(context).push(
@@ -202,16 +201,16 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            HomeScreenCategoryTile(
-                              title: 'Calender',
-                              tileIcon: Icons.edit_calendar_outlined,
-                              tileColor: const Color.fromARGB(67, 60, 75, 188),
-                              iconColor: const Color(0xFFEE90DF),
-                              onPressed: () {},
-                            ),
+                            // const SizedBox(
+                            //   height: 20,
+                            // ),
+                            // HomeScreenCategoryTile(
+                            //   title: 'Calender',
+                            //   tileIcon: Icons.edit_calendar_outlined,
+                            //   tileColor: const Color.fromARGB(67, 60, 75, 188),
+                            //   iconColor: const Color(0xFFEE90DF),
+                            //   onPressed: () {},
+                            // ),
                           ],
                         ),
                       ),

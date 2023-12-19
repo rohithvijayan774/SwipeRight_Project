@@ -8,7 +8,6 @@ class DTHUserDetails extends StatelessWidget {
   final String rechargeDate;
   final String expiryDate;
   final String reminderDate;
-  final int number;
   final int amount;
   const DTHUserDetails({
     super.key,
@@ -17,7 +16,6 @@ class DTHUserDetails extends StatelessWidget {
     required this.rechargeDate,
     required this.expiryDate,
     required this.reminderDate,
-    required this.number,
     required this.amount,
   });
 
@@ -66,7 +64,7 @@ class DTHUserDetails extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        padding:const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         width: width,
                         decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -86,25 +84,6 @@ class DTHUserDetails extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text(
-                              'Mobile Number',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'SofiaPro',
-                                fontSize: 17,
-                              ),
-                            ),
-                            Text(
-                              number.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'SofiaPro',
-                                fontSize: 17,
-                              ),
                             ),
                             const SizedBox(
                               height: 20,
